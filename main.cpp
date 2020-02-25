@@ -6,7 +6,7 @@
  Create a branch named Part1
  
  1) write 3 UDTs named FloatType, DoubleType, IntType.
- 
+
  2) give each UDT the following member functions:
         add( lhs, rhs );
         subtract( lhs, rhs );
@@ -34,6 +34,21 @@
 
  Wait for my code review.
  */
+
+ struct FloatType
+ {
+
+ };
+
+ struct DoubleType
+ {
+
+ };
+
+struct IntType
+{
+
+};
 
 #include <iostream>
 int main()
