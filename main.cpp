@@ -1,3 +1,4 @@
+#include <iostream>
 /*
  Project 4 - Part 1 / 9
  video: Chapter 2 Part 7
@@ -102,13 +103,14 @@ struct IntType
     {
         if( rhs == 0 )
         {
+            std::cout << "warning, trying to divide by 0\n";
             return 0;
         }
         return lhs / rhs;
     }
 };
 
-#include <iostream>
+
 int main()
 {
     FloatType ft;
