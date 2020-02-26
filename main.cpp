@@ -55,6 +55,12 @@
 
     float divide( float lhs, float rhs )
     {
+        if( rhs == 0.f )
+        {
+            std::cout << "warning, trying to divide by 0\n";
+
+            return 0;
+        }
         return lhs / rhs;
     }
  };
