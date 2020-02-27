@@ -82,6 +82,10 @@
 
     double divide( double lhs, double rhs )
     {
+        if( rhs == 0 )
+        {
+            std::cout << "warning, trying to divide by 0\n";
+        }
         return lhs / rhs;
     }
  };
