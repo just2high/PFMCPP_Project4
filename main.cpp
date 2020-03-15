@@ -82,7 +82,7 @@ struct FloatType
         delete a;
         a = nullptr;
     }
-    
+
     //taking FloatType as argument
     FloatType& add( const FloatType& rhs );
     FloatType& subtract( const FloatType& rhs );
@@ -100,7 +100,7 @@ struct FloatType
     FloatType& subtract( const IntType& rhs );
     FloatType& multiply( const IntType& rhs );
     FloatType& divide (const IntType& rhs );
-
+    
     //previous functions
 
     FloatType& add( float rhs )
@@ -253,7 +253,199 @@ struct IntType
     }
 };
 
+// FUNCTION DEFINITIONS //
 
+//FloatType
+//taking FloatType as argument
+FloatType& FloatType::add( const FloatType& rhs )
+{
+    return add( *rhs.a );
+}
+
+FloatType& FloatType::subtract( const FloatType& rhs )
+{
+    return subtract( *rhs.a );
+}
+
+FloatType& FloatType::multiply( const FloatType& rhs )
+{
+    return multiply( *rhs.a );
+}
+
+FloatType& FloatType::divide (const FloatType& rhs )
+{
+    return divide( *rhs.a );
+}
+
+//taking DoubleType as argument
+FloatType& FloatType::add( const DoubleType& rhs )    
+{
+    return add( *rhs.a );
+}
+
+FloatType& FloatType::subtract( const DoubleType& rhs )    
+{
+    return subtract( *rhs.a );
+}
+
+FloatType& FloatType::multiply( const DoubleType& rhs )    
+{
+    return multiply( *rhs.a );
+}
+
+FloatType& FloatType::divide (const DoubleType& rhs )    
+{
+    return divide( *rhs.a );
+}
+
+//taking IntType as argument
+FloatType& FloatType::add( const IntType& rhs )    
+{
+    return add( *rhs.a );
+}
+
+FloatType& FloatType::subtract( const IntType& rhs )    
+{
+    return subtract( *rhs.a );
+}
+
+FloatType& FloatType::multiply( const IntType& rhs )    
+{
+    return multiply( *rhs.a );
+}
+
+FloatType& FloatType::divide (const IntType& rhs )    
+{
+    return divide( *rhs.a );
+}
+
+//DoubleType
+//taking FloatType as argument
+DoubleType& DoubleType::add( const FloatType& rhs )
+{
+    return add( *rhs.a );
+}
+
+DoubleType& DoubleType::subtract( const FloatType& rhs )
+{
+    return subtract( *rhs.a );
+}
+
+DoubleType& DoubleType::multiply( const FloatType& rhs )
+{
+    return multiply( *rhs.a );
+}
+
+DoubleType& DoubleType::divide (const FloatType& rhs )
+{
+    return divide( *rhs.a );
+}
+
+//taking DoubleType as argument
+DoubleType& DoubleType::add( const DoubleType& rhs )    
+{
+    return add( *rhs.a );
+}
+
+DoubleType& DoubleType::subtract( const DoubleType& rhs )    
+{
+    return subtract( *rhs.a );
+}
+
+DoubleType& DoubleType::multiply( const DoubleType& rhs )    
+{
+    return multiply( *rhs.a );
+}
+
+DoubleType& DoubleType::divide (const DoubleType& rhs )    
+{
+    return divide( *rhs.a );
+}
+
+//taking IntType as argument
+DoubleType& DoubleType::add( const IntType& rhs )    
+{
+    return add( *rhs.a );
+}
+
+DoubleType& DoubleType::subtract( const IntType& rhs )    
+{
+    return subtract( *rhs.a );
+}
+
+DoubleType& DoubleType::multiply( const IntType& rhs )    
+{
+    return multiply( *rhs.a );
+}
+
+DoubleType& DoubleType::divide (const IntType& rhs )    
+{
+    return divide( *rhs.a );
+}
+
+//IntType
+//taking FloatType as argument
+IntType& IntType::add( const FloatType& rhs )
+{
+    return add( *rhs.a );
+}
+
+IntType& IntType::subtract( const FloatType& rhs )
+{
+    return subtract( *rhs.a );
+}
+
+IntType& IntType::multiply( const FloatType& rhs )
+{
+    return multiply( *rhs.a );
+}
+
+IntType& IntType::divide (const FloatType& rhs )
+{
+    return divide( *rhs.a );
+}
+
+//taking DoubleType as argument
+IntType& IntType::add( const DoubleType& rhs )    
+{
+    return add( *rhs.a );
+}
+
+IntType& IntType::subtract( const DoubleType& rhs )    
+{
+    return subtract( *rhs.a );
+}
+
+IntType& IntType::multiply( const DoubleType& rhs )    
+{
+    return multiply( *rhs.a );
+}
+
+IntType& IntType::divide (const DoubleType& rhs )    
+{
+    return divide( *rhs.a );
+}
+
+//taking IntType as argument
+IntType& IntType::add( const IntType& rhs )    
+{
+    return add( *rhs.a );
+}
+
+IntType& IntType::subtract( const IntType& rhs )    
+{
+    return subtract( *rhs.a );
+}
+
+IntType& IntType::multiply( const IntType& rhs )    
+{
+    return multiply( *rhs.a );
+}
+
+IntType& IntType::divide (const IntType& rhs )    
+{
+    return divide( *rhs.a );
+}
 int main()
 { /*
     FloatType ft;
