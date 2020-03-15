@@ -83,6 +83,11 @@ struct FloatType
         a = nullptr;
     }
     
+    //taking FloatType as argument
+    FloatType& add( const FloatType& rhs );
+
+    //taking DoubleType as argument
+    //taking IntType as argument
     //previous functions
 
     FloatType& add( float rhs )
