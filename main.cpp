@@ -71,6 +71,8 @@ send me a DM to check your pull request
 
 #include <iostream>
 
+struct DoubleType;
+struct IntType;
 struct FloatType
 {
     float* a;
@@ -83,28 +85,32 @@ struct FloatType
     
     //previous functions
 
-    float add( float lhs, float rhs )
+    FloatType& add( float rhs )
     {
-        return lhs + rhs;
+        *a += rhs;
+        return *this;
     }
 
-    float subtract( float lhs, float rhs )
+    FloatType& subtract( float rhs )
     {
-        return lhs + rhs;
+        *a -= rhs;
+        return *this;
     }
 
-    float multiply( float lhs, float rhs )
+    FloatType& multiply( float rhs )
     {
-        return lhs * rhs;
+        *a *= rhs;
+        return *this;
     }
 
-    float divide( float lhs, float rhs )
+    FloatType& divide( float rhs )
     {
         if( rhs == 0.f )
         {
             std::cout << "warning, trying to divide by 0\n";
         }
-        return lhs / rhs;
+        *a /= rhs;
+        return *this;
     }
 };
 
@@ -119,28 +125,34 @@ struct DoubleType
         a = nullptr;
     }
 
-    double add( double lhs, double rhs )
+    //previous functions
+    DoubleType& add( double rhs )
     {
-        return lhs + rhs;
+        *a += rhs;
+        return *this;
     }
     
-    double subtract( double lhs, double rhs )
+    DoubleType& subtract( double rhs )
     {
-        return lhs - rhs;
+        *a -= rhs;
+        return *this;
     }
 
-    double multiply( double lhs, double rhs )
+    DoubleType& multiply( double rhs )
     {
-        return lhs * rhs;
+        *a *= rhs;
+        return *this;
     }
 
-    double divide( double lhs, double rhs )
+    DoubleType& divide( double rhs )
     {
         if( rhs == 0 )
         {
             std::cout << "warning, trying to divide by 0\n";
         }
-        return lhs / rhs;
+        *a /= rhs;
+        
+        return *this;
     }
 };
 
@@ -155,35 +167,41 @@ struct IntType
         a = nullptr;
     }
 
-    int add( int lhs, int rhs )
+    //previous functions
+    IntType& add( int rhs )
     {
-        return lhs + rhs;
+        *a += rhs;
+        return *this;
     }
 
-    int subtract( int lhs, int rhs )
+    IntType& subtract( int rhs )
     {
-        return lhs - rhs;
+        *a -= rhs;
+        return *this;
     }
 
-    int multiply( int lhs, int rhs )
+    IntType& multiply( int rhs )
     {
-        return lhs * rhs;
+        *a *= rhs;
+        return *this;
     }
 
-    int divide( int lhs, int rhs )
+    IntType& divide( int rhs )
     {
         if( rhs == 0 )
         {
             std::cout << "warning, trying to divide by 0\n";
-            return 0;
+            *a -= *a;
+            return *this;
         }
-        return lhs / rhs;
+        *a /= rhs;
+        return *this;
     }
 };
 
 
 int main()
-{
+{ /*
     FloatType ft;
     
     std::cout << "result of ft.add(): " << ft.add( 4.3f, 3.9f ) << std::endl;
@@ -210,6 +228,6 @@ int main()
     std::cout << "result of it.divide(): " << it.divide ( 99, 0 ) << std::endl;
 
     std::cout << "\n";
-
+*/
     std::cout << "good to go!" << std::endl;
 }
