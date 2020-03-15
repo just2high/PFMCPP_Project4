@@ -18,18 +18,15 @@ struct A {};
 
 struct HeapA
 {
-    HeapA( A* ptr ) : pointerToA( ptr ) {}
+    A* a;
+
+    HeapA() : a( new A ) {}
     ~HeapA()
     {
-        delete a1;
+        delete a;
+        a = nullptr;
     }
-    A* pointerToA = nullptr;
 };
-
-
-
-
-
 
  /*
  1) Edit your 3 structs so that they own a heap-allocated primitive type without using smart pointers  
@@ -76,6 +73,16 @@ send me a DM to check your pull request
 
 struct FloatType
 {
+    float* a;
+    FloatType( float varA ) : a( new float(varA) ) {}
+    ~FloatType()
+    {
+        delete a;
+        a = nullptr;
+    }
+    
+    //previous functions
+
     float add( float lhs, float rhs )
     {
         return lhs + rhs;
@@ -103,6 +110,15 @@ struct FloatType
 
 struct DoubleType
 {
+    double* a;
+
+    DoubleType ( double varA ) : a( new double(varA) ) {}
+    ~DoubleType()
+    {
+        delete a;
+        a = nullptr;
+    }
+
     double add( double lhs, double rhs )
     {
         return lhs + rhs;
@@ -130,6 +146,15 @@ struct DoubleType
 
 struct IntType
 {
+    int* a;
+
+    IntType( int varA ) : a( new int(varA) ) {}
+    ~IntType()
+    {
+        delete a;
+        a = nullptr;
+    }
+
     int add( int lhs, int rhs )
     {
         return lhs + rhs;
