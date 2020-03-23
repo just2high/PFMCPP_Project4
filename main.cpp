@@ -44,7 +44,6 @@ send me a DM to check your pull request
 
 struct FloatType
 {
-    float* a;
     FloatType( float varA ) : a( new float(varA) ) {}
     ~FloatType()
     {
@@ -52,10 +51,15 @@ struct FloatType
         a = nullptr;
     }
 
+    operator float() { return *a; }
+
     FloatType& add( float rhs );
     FloatType& subtract( float rhs );
     FloatType& multiply( float rhs );
     FloatType& divide( float rhs );
+
+    private:
+    float* a;
 };
 
 FloatType::FloatType& add( float rhs )
@@ -88,8 +92,6 @@ FloatType::FloatType& divide( float rhs )
 
 struct DoubleType
 {
-    double* a;
-
     DoubleType ( double varA ) : a( new double(varA) ) {}
     ~DoubleType()
     {
@@ -97,10 +99,15 @@ struct DoubleType
         a = nullptr;
     }
 
+    operator double() { return *a; }
+
     DoubleType& add( double rhs );
     DoubleType& subtract( double rhs );
     DoubleType& multiply( double rhs );
     DoubleType& divide( double rhs );
+
+    private:
+    double* a;
 };
 
 DoubleType::DoubleType& add( double rhs )
@@ -134,8 +141,6 @@ DoubleType::DoubleType& divide( double rhs )
 
 struct IntType
 {
-    int* a;
-
     IntType( int varA ) : a( new int(varA) ) {}
     ~IntType()
     {
@@ -143,10 +148,15 @@ struct IntType
         a = nullptr;
     }
 
+    operator int() { return *a; }
+
     IntType& add( int rhs );
     IntType& subtract( int rhs );
     IntType& multiply( int rhs );
     IntType& divide( int rhs );
+
+    private:
+    int* a;
 };
 
 IntType::IntType& add( int rhs )
