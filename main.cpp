@@ -130,7 +130,7 @@ DoubleType& DoubleType::multiply( double rhs )
 
 DoubleType& DoubleType::divide( double rhs )
 {
-    if( rhs == 0 )
+    if( static_cast<int>(rhs) == 0 )
     {
         std::cout << "warning, trying to divide by 0\n";
     }
@@ -198,31 +198,31 @@ int main()
 { 
     divider();
 
-    FloatType ft(3.2);
+    FloatType ft(3.2f);
     DoubleType dt(8.473276);
     IntType it(19);
 
-    std::cout << "The starting value of FloatType ft is: " << *ft.a << std::endl;
-    std::cout << "The starting value of DoubleType dt is: " << *dt.a << std::endl;
-    std::cout << "The starting value of IntType it is: " << *it.a << std::endl;
+    std::cout << "The starting value of FloatType ft is: " << static_cast<float>(ft) << std::endl;
+    std::cout << "The starting value of DoubleType dt is: " << static_cast<double>(dt) << std::endl;
+    std::cout << "The starting value of IntType it is: " << static_cast<int>(it) << std::endl;
 
     divider();
 
-    std::cout << "We can add (5.4) to ft and multiply it by (6) which equals: " << *ft.add(5.4).multiply(6).a << std::endl;
+    std::cout << "We can add (5.4) to ft and multiply it by (6) which equals: " << static_cast<float>( ft.add(5.4f).multiply(6) ) << std::endl;
 
-    std::cout << "We can divde dt by (2.2) and add (0.86) which equals: " << *dt.divide(2.2).add(0.86).a << std::endl;
+    std::cout << "We can divde dt by (2.2) and add (0.86) which equals: " << static_cast<double>(dt.divide(2.2).add(0.86) ) << std::endl;
 
-    std::cout << "We can subtract (10) from it and multiply by (12) and divide by ft(" << *ft.a << ") which equals: " << *it.subtract(10).multiply(102).divide(ft).a << std::endl;
+    std::cout << "We can subtract (10) from it and multiply by (12) and divide by ft(" << static_cast<float>(ft) << ") which equals: " << static_cast<int>( it.subtract(10).multiply(102).divide( static_cast<int>(ft) ) ) << std::endl;
 
     divider();
 
     std::cout << "We will find that we cannot divide it by a number less than 1:\n"; 
-    std::cout << "it(" << *it.a << ") divided by 0.2 throws an error:\n";
-    std::cout << *it.divide(0.2).a << std::endl;
+    std::cout << "it(" << static_cast<int>(it) << ") divided by 0.2 throws an error:\n";
+    std::cout << it.divide(static_cast<int>(0.2)) << std::endl;
 
     divider();
 
-    std::cout << "But we can use all types together.  The result of 'dt' time 'it' plus 'ft' is: " << *dt.multiply(it).add(ft).a <<std::endl;
+    std::cout << "But we can use all types together.  The result of 'dt' time 'it' plus 'ft' is: " << static_cast<double>( dt.multiply( static_cast<int>(it) ).add( static_cast<double>(ft) ) ) <<std::endl;
 
     divider();
 
