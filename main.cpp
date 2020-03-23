@@ -62,25 +62,25 @@ struct FloatType
     float* a;
 };
 
-FloatType::FloatType& add( float rhs )
+FloatType& FloatType::add( float rhs )
 {
     *a += rhs;
     return *this;
 }
 
-FloatType::FloatType& subtract( float rhs )
+FloatType& FloatType::subtract( float rhs )
 {
     *a -= rhs;
     return *this;
 }
 
-FloatType::FloatType& multiply( float rhs )
+FloatType& FloatType::multiply( float rhs )
 {
     *a *= rhs;
     return *this;
 }
 
-FloatType::FloatType& divide( float rhs )
+FloatType& FloatType::divide( float rhs )
 {
     if( rhs == 0.f )
     {
@@ -110,25 +110,25 @@ struct DoubleType
     double* a;
 };
 
-DoubleType::DoubleType& add( double rhs )
+DoubleType& DoubleType:: add( double rhs )
 {
     *a += rhs;
     return *this;
 }
 
-DoubleType::DoubleType& subtract( double rhs )
+DoubleType& DoubleType::subtract( double rhs )
 {
     *a -= rhs;
     return *this;
 }
 
-DoubleType::DoubleType& multiply( double rhs )
+DoubleType& DoubleType::multiply( double rhs )
 {
     *a *= rhs;
     return *this;
 }
 
-DoubleType::DoubleType& divide( double rhs )
+DoubleType& DoubleType::divide( double rhs )
 {
     if( rhs == 0 )
     {
@@ -159,25 +159,25 @@ struct IntType
     int* a;
 };
 
-IntType::IntType& add( int rhs )
+IntType& IntType::add( int rhs )
 {
     *a += rhs;
     return *this;
 }
 
-IntType::IntType& subtract( int rhs )
+IntType& IntType::subtract( int rhs )
 {
     *a -= rhs;
     return *this;
 }
 
-IntType::IntType& multiply( int rhs )
+IntType& IntType::multiply( int rhs )
 {
     *a *= rhs;
     return *this;
 }
 
-IntType::IntType& divide( int rhs )
+IntType& IntType::divide( int rhs )
 {
     if( rhs == 0 )
     {
