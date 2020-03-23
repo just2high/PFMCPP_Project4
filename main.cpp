@@ -42,8 +42,6 @@ send me a DM to check your pull request
 
 #include <iostream>
 
-struct DoubleType;
-struct IntType;
 struct FloatType
 {
     float* a;
@@ -53,37 +51,40 @@ struct FloatType
         delete a;
         a = nullptr;
     }
-   
-    //previous functions
 
-    FloatType& add( float rhs )
-    {
-        *a += rhs;
-        return *this;
-    }
-
-    FloatType& subtract( float rhs )
-    {
-        *a -= rhs;
-        return *this;
-    }
-
-    FloatType& multiply( float rhs )
-    {
-        *a *= rhs;
-        return *this;
-    }
-
-    FloatType& divide( float rhs )
-    {
-        if( rhs == 0.f )
-        {
-            std::cout << "warning, trying to divide by 0\n";
-        }
-        *a /= rhs;
-        return *this;
-    }
+    FloatType& add( float rhs );
+    FloatType& subtract( float rhs );
+    FloatType& multiply( float rhs );
+    FloatType& divide( float rhs );
 };
+
+FloatType::FloatType& add( float rhs )
+{
+    *a += rhs;
+    return *this;
+}
+
+FloatType::FloatType& subtract( float rhs )
+{
+    *a -= rhs;
+    return *this;
+}
+
+FloatType::FloatType& multiply( float rhs )
+{
+    *a *= rhs;
+    return *this;
+}
+
+FloatType::FloatType& divide( float rhs )
+{
+    if( rhs == 0.f )
+    {
+        std::cout << "warning, trying to divide by 0\n";
+    }
+    *a /= rhs;
+    return *this;
+}
 
 struct DoubleType
 {
@@ -96,36 +97,40 @@ struct DoubleType
         a = nullptr;
     }
 
-    //previous functions
-    DoubleType& add( double rhs )
-    {
-        *a += rhs;
-        return *this;
-    }
-    
-    DoubleType& subtract( double rhs )
-    {
-        *a -= rhs;
-        return *this;
-    }
-
-    DoubleType& multiply( double rhs )
-    {
-        *a *= rhs;
-        return *this;
-    }
-
-    DoubleType& divide( double rhs )
-    {
-        if( rhs == 0 )
-        {
-            std::cout << "warning, trying to divide by 0\n";
-        }
-        *a /= rhs;
-        
-        return *this;
-    }
+    DoubleType& add( double rhs );
+    DoubleType& subtract( double rhs );
+    DoubleType& multiply( double rhs );
+    DoubleType& divide( double rhs );
 };
+
+DoubleType::DoubleType& add( double rhs )
+{
+    *a += rhs;
+    return *this;
+}
+
+DoubleType::DoubleType& subtract( double rhs )
+{
+    *a -= rhs;
+    return *this;
+}
+
+DoubleType::DoubleType& multiply( double rhs )
+{
+    *a *= rhs;
+    return *this;
+}
+
+DoubleType::DoubleType& divide( double rhs )
+{
+    if( rhs == 0 )
+    {
+        std::cout << "warning, trying to divide by 0\n";
+    }
+    *a /= rhs;
+    
+    return *this;
+}
 
 struct IntType
 {
@@ -138,37 +143,41 @@ struct IntType
         a = nullptr;
     }
 
-    //previous functions
-    IntType& add( int rhs )
-    {
-        *a += rhs;
-        return *this;
-    }
-
-    IntType& subtract( int rhs )
-    {
-        *a -= rhs;
-        return *this;
-    }
-
-    IntType& multiply( int rhs )
-    {
-        *a *= rhs;
-        return *this;
-    }
-
-    IntType& divide( int rhs )
-    {
-        if( rhs == 0 )
-        {
-            std::cout << "warning, trying to divide by 0\n";
-            std::cout << "Current value of IntType: ";
-            return *this;
-        }
-        *a /= rhs;
-        return *this;
-    }
+    IntType& add( int rhs );
+    IntType& subtract( int rhs );
+    IntType& multiply( int rhs );
+    IntType& divide( int rhs );
 };
+
+IntType::IntType& add( int rhs )
+{
+    *a += rhs;
+    return *this;
+}
+
+IntType::IntType& subtract( int rhs )
+{
+    *a -= rhs;
+    return *this;
+}
+
+IntType::IntType& multiply( int rhs )
+{
+    *a *= rhs;
+    return *this;
+}
+
+IntType::IntType& divide( int rhs )
+{
+    if( rhs == 0 )
+    {
+        std::cout << "warning, trying to divide by 0\n";
+        std::cout << "Current value of IntType: ";
+        return *this;
+    }
+    *a /= rhs;
+    return *this;
+}
 
 void divider()
 {
