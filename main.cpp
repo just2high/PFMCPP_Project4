@@ -73,11 +73,8 @@ private:
 
 #include <iostream>
 
-struct DoubleType;
-struct IntType;
 struct FloatType
 {
-    float* a;
     FloatType( float varA ) : a( new float(varA) ) {}
     ~FloatType()
     {
@@ -85,59 +82,47 @@ struct FloatType
         a = nullptr;
     }
 
-    //taking FloatType as argument
-    FloatType& add( const FloatType& rhs );
-    FloatType& subtract( const FloatType& rhs );
-    FloatType& multiply( const FloatType& rhs );
-    FloatType& divide (const FloatType& rhs );
+    operator float() { return *a; }
 
-    //taking DoubleType as argument
-    FloatType& add( const DoubleType& rhs );
-    FloatType& subtract( const DoubleType& rhs );
-    FloatType& multiply( const DoubleType& rhs );
-    FloatType& divide (const DoubleType& rhs );
+    FloatType& add( float rhs );
+    FloatType& subtract( float rhs );
+    FloatType& multiply( float rhs );
+    FloatType& divide( float rhs );
 
-    //taking IntType as argument
-    FloatType& add( const IntType& rhs );
-    FloatType& subtract( const IntType& rhs );
-    FloatType& multiply( const IntType& rhs );
-    FloatType& divide (const IntType& rhs );
-    
-    //previous functions
-
-    FloatType& add( float rhs )
-    {
-        *a += rhs;
-        return *this;
-    }
-
-    FloatType& subtract( float rhs )
-    {
-        *a -= rhs;
-        return *this;
-    }
-
-    FloatType& multiply( float rhs )
-    {
-        *a *= rhs;
-        return *this;
-    }
-
-    FloatType& divide( float rhs )
-    {
-        if( rhs == 0.f )
-        {
-            std::cout << "warning, trying to divide by 0\n";
-        }
-        *a /= rhs;
-        return *this;
-    }
+    private:
+    float* a;
 };
+
+FloatType& FloatType::add( float rhs )
+{
+    *a += rhs;
+    return *this;
+}
+
+FloatType& FloatType::subtract( float rhs )
+{
+    *a -= rhs;
+    return *this;
+}
+
+FloatType& FloatType::multiply( float rhs )
+{
+    *a *= rhs;
+    return *this;
+}
+
+FloatType& FloatType::divide( float rhs )
+{
+    if( rhs == 0.f )
+    {
+        std::cout << "warning, trying to divide by 0\n";
+    }
+    *a /= rhs;
+    return *this;
+}
 
 struct DoubleType
 {
-    double* a;
-
     DoubleType ( double varA ) : a( new double(varA) ) {}
     ~DoubleType()
     {
@@ -145,59 +130,48 @@ struct DoubleType
         a = nullptr;
     }
 
-    //taking FloatType as argument
-    DoubleType& add( const FloatType& rhs );
-    DoubleType& subtract( const FloatType& rhs );
-    DoubleType& multiply( const FloatType& rhs );
-    DoubleType& divide (const FloatType& rhs );
+    operator double() { return *a; }
 
-    //taking DoubleType as argument
-    DoubleType& add( const DoubleType& rhs );
-    DoubleType& subtract( const DoubleType& rhs );
-    DoubleType& multiply( const DoubleType& rhs );
-    DoubleType& divide (const DoubleType& rhs );
+    DoubleType& add( double rhs );
+    DoubleType& subtract( double rhs );
+    DoubleType& multiply( double rhs );
+    DoubleType& divide( double rhs );
 
-    //taking IntType as argument
-    DoubleType& add( const IntType& rhs );
-    DoubleType& subtract( const IntType& rhs );
-    DoubleType& multiply( const IntType& rhs );
-    DoubleType& divide (const IntType& rhs );
-
-    //previous functions
-    DoubleType& add( double rhs )
-    {
-        *a += rhs;
-        return *this;
-    }
-    
-    DoubleType& subtract( double rhs )
-    {
-        *a -= rhs;
-        return *this;
-    }
-
-    DoubleType& multiply( double rhs )
-    {
-        *a *= rhs;
-        return *this;
-    }
-
-    DoubleType& divide( double rhs )
-    {
-        if( rhs == 0 )
-        {
-            std::cout << "warning, trying to divide by 0\n";
-        }
-        *a /= rhs;
-        
-        return *this;
-    }
+    private:
+    double* a;
 };
+
+DoubleType& DoubleType:: add( double rhs )
+{
+    *a += rhs;
+    return *this;
+}
+
+DoubleType& DoubleType::subtract( double rhs )
+{
+    *a -= rhs;
+    return *this;
+}
+
+DoubleType& DoubleType::multiply( double rhs )
+{
+    *a *= rhs;
+    return *this;
+}
+
+DoubleType& DoubleType::divide( double rhs )
+{
+    if( static_cast<int>(rhs) == 0 )
+    {
+        std::cout << "warning, trying to divide by 0\n";
+    }
+    *a /= rhs;
+    
+    return *this;
+}
 
 struct IntType
 {
-    int* a;
-
     IntType( int varA ) : a( new int(varA) ) {}
     ~IntType()
     {
@@ -205,248 +179,45 @@ struct IntType
         a = nullptr;
     }
 
-    //taking FloatType as argument
-    IntType& add( const FloatType& rhs );
-    IntType& subtract( const FloatType& rhs );
-    IntType& multiply( const FloatType& rhs );
-    IntType& divide (const FloatType& rhs );
+    operator int() { return *a; }
 
-    //taking DoubleType as argument
-    IntType& add( const DoubleType& rhs );
-    IntType& subtract( const DoubleType& rhs );
-    IntType& multiply( const DoubleType& rhs );
-    IntType& divide (const DoubleType& rhs );
+    IntType& add( int rhs );
+    IntType& subtract( int rhs );
+    IntType& multiply( int rhs );
+    IntType& divide( int rhs );
 
-    //taking IntType as argument
-    IntType& add( const IntType& rhs );
-    IntType& subtract( const IntType& rhs );
-    IntType& multiply( const IntType& rhs );
-    IntType& divide (const IntType& rhs );
-
-    //previous functions
-    IntType& add( int rhs )
-    {
-        *a += rhs;
-        return *this;
-    }
-
-    IntType& subtract( int rhs )
-    {
-        *a -= rhs;
-        return *this;
-    }
-
-    IntType& multiply( int rhs )
-    {
-        *a *= rhs;
-        return *this;
-    }
-
-    IntType& divide( int rhs )
-    {
-        if( rhs == 0 )
-        {
-            std::cout << "warning, trying to divide by 0\n";
-            std::cout << "Current value of IntType: ";
-            return *this;
-        }
-        *a /= rhs;
-        return *this;
-    }
+    private:
+    int* a;
 };
 
-// FUNCTION DEFINITIONS //
-
-//FloatType
-//taking FloatType as argument
-FloatType& FloatType::add( const FloatType& rhs )
+IntType& IntType::add( int rhs )
 {
-    return add( *rhs.a );
+    *a += rhs;
+    return *this;
 }
 
-FloatType& FloatType::subtract( const FloatType& rhs )
+IntType& IntType::subtract( int rhs )
 {
-    return subtract( *rhs.a );
+    *a -= rhs;
+    return *this;
 }
 
-FloatType& FloatType::multiply( const FloatType& rhs )
+IntType& IntType::multiply( int rhs )
 {
-    return multiply( *rhs.a );
+    *a *= rhs;
+    return *this;
 }
 
-FloatType& FloatType::divide (const FloatType& rhs )
+IntType& IntType::divide( int rhs )
 {
-    return divide( *rhs.a );
-}
-
-//taking DoubleType as argument
-FloatType& FloatType::add( const DoubleType& rhs )    
-{
-    return add( *rhs.a );
-}
-
-FloatType& FloatType::subtract( const DoubleType& rhs )    
-{
-    return subtract( *rhs.a );
-}
-
-FloatType& FloatType::multiply( const DoubleType& rhs )    
-{
-    return multiply( *rhs.a );
-}
-
-FloatType& FloatType::divide (const DoubleType& rhs )    
-{
-    return divide( *rhs.a );
-}
-
-//taking IntType as argument
-FloatType& FloatType::add( const IntType& rhs )    
-{
-    return add( *rhs.a );
-}
-
-FloatType& FloatType::subtract( const IntType& rhs )    
-{
-    return subtract( *rhs.a );
-}
-
-FloatType& FloatType::multiply( const IntType& rhs )    
-{
-    return multiply( *rhs.a );
-}
-
-FloatType& FloatType::divide (const IntType& rhs )    
-{
-    return divide( *rhs.a );
-}
-
-//DoubleType
-//taking FloatType as argument
-DoubleType& DoubleType::add( const FloatType& rhs )
-{
-    return add( *rhs.a );
-}
-
-DoubleType& DoubleType::subtract( const FloatType& rhs )
-{
-    return subtract( *rhs.a );
-}
-
-DoubleType& DoubleType::multiply( const FloatType& rhs )
-{
-    return multiply( *rhs.a );
-}
-
-DoubleType& DoubleType::divide (const FloatType& rhs )
-{
-    return divide( *rhs.a );
-}
-
-//taking DoubleType as argument
-DoubleType& DoubleType::add( const DoubleType& rhs )    
-{
-    return add( *rhs.a );
-}
-
-DoubleType& DoubleType::subtract( const DoubleType& rhs )    
-{
-    return subtract( *rhs.a );
-}
-
-DoubleType& DoubleType::multiply( const DoubleType& rhs )    
-{
-    return multiply( *rhs.a );
-}
-
-DoubleType& DoubleType::divide (const DoubleType& rhs )    
-{
-    return divide( *rhs.a );
-}
-
-//taking IntType as argument
-DoubleType& DoubleType::add( const IntType& rhs )    
-{
-    return add( *rhs.a );
-}
-
-DoubleType& DoubleType::subtract( const IntType& rhs )    
-{
-    return subtract( *rhs.a );
-}
-
-DoubleType& DoubleType::multiply( const IntType& rhs )    
-{
-    return multiply( *rhs.a );
-}
-
-DoubleType& DoubleType::divide (const IntType& rhs )    
-{
-    return divide( *rhs.a );
-}
-
-//IntType
-//taking FloatType as argument
-IntType& IntType::add( const FloatType& rhs )
-{
-    return add( *rhs.a );
-}
-
-IntType& IntType::subtract( const FloatType& rhs )
-{
-    return subtract( *rhs.a );
-}
-
-IntType& IntType::multiply( const FloatType& rhs )
-{
-    return multiply( *rhs.a );
-}
-
-IntType& IntType::divide (const FloatType& rhs )
-{
-    return divide( *rhs.a );
-}
-
-//taking DoubleType as argument
-IntType& IntType::add( const DoubleType& rhs )    
-{
-    return add( *rhs.a );
-}
-
-IntType& IntType::subtract( const DoubleType& rhs )    
-{
-    return subtract( *rhs.a );
-}
-
-IntType& IntType::multiply( const DoubleType& rhs )    
-{
-    return multiply( *rhs.a );
-}
-
-IntType& IntType::divide (const DoubleType& rhs )    
-{
-    return divide( *rhs.a );
-}
-
-//taking IntType as argument
-IntType& IntType::add( const IntType& rhs )    
-{
-    return add( *rhs.a );
-}
-
-IntType& IntType::subtract( const IntType& rhs )    
-{
-    return subtract( *rhs.a );
-}
-
-IntType& IntType::multiply( const IntType& rhs )    
-{
-    return multiply( *rhs.a );
-}
-
-IntType& IntType::divide (const IntType& rhs )    
-{
-    return divide( *rhs.a );
+    if( rhs == 0 )
+    {
+        std::cout << "warning, trying to divide by 0\n";
+        std::cout << "Current value of IntType: ";
+        return *this;
+    }
+    *a /= rhs;
+    return *this;
 }
 
 void divider()
@@ -458,31 +229,31 @@ int main()
 { 
     divider();
 
-    FloatType ft(3.2);
+    FloatType ft(3.2f);
     DoubleType dt(8.473276);
     IntType it(19);
 
-    std::cout << "The starting value of FloatType ft is: " << *ft.a << std::endl;
-    std::cout << "The starting value of DoubleType dt is: " << *dt.a << std::endl;
-    std::cout << "The starting value of IntType it is: " << *it.a << std::endl;
+    std::cout << "The starting value of FloatType ft is: " << static_cast<float>(ft) << std::endl;
+    std::cout << "The starting value of DoubleType dt is: " << static_cast<double>(dt) << std::endl;
+    std::cout << "The starting value of IntType it is: " << static_cast<int>(it) << std::endl;
 
     divider();
 
-    std::cout << "We can add (5.4) to ft and multiply it by (6) which equals: " << *ft.add(5.4).multiply(6).a << std::endl;
+    std::cout << "We can add (5.4) to ft and multiply it by (6) which equals: " << static_cast<float>( ft.add(5.4f).multiply(6) ) << std::endl;
 
-    std::cout << "We can divde dt by (2.2) and add (0.86) which equals: " << *dt.divide(2.2).add(0.86).a << std::endl;
+    std::cout << "We can divde dt by (2.2) and add (0.86) which equals: " << static_cast<double>(dt.divide(2.2).add(0.86) ) << std::endl;
 
-    std::cout << "We can subtract (10) from it and multiply by (12) and divide by ft(" << *ft.a << ") which equals: " << *it.subtract(10).multiply(102).divide(ft).a << std::endl;
+    std::cout << "We can subtract (10) from it and multiply by (12) and divide by ft(" << static_cast<float>(ft) << ") which equals: " << static_cast<int>( it.subtract(10).multiply(102).divide( static_cast<int>(ft) ) ) << std::endl;
 
     divider();
 
     std::cout << "We will find that we cannot divide it by a number less than 1:\n"; 
-    std::cout << "it(" << *it.a << ") divided by 0.2 throws an error:\n";
-    std::cout << *it.divide(0.2).a << std::endl;
+    std::cout << "it(" << static_cast<int>(it) << ") divided by 0.2 throws an error:\n";
+    std::cout << it.divide(static_cast<int>(0.2)) << std::endl;
 
     divider();
 
-    std::cout << "But we can use all types together.  The result of 'dt' time 'it' plus 'ft' is: " << *dt.multiply(it).add(ft).a <<std::endl;
+    std::cout << "But we can use all types together.  The result of 'dt' time 'it' plus 'ft' is: " << static_cast<double>( dt.multiply( static_cast<int>(it) ).add( static_cast<double>(ft) ) ) <<std::endl;
 
     divider();
 
