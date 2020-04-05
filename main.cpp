@@ -57,23 +57,38 @@ send me a DM to check your pull request
  Wait for my code review.
  */
 
+#include <iostream>
+#include <cmath>
+
+struct DoubleType;
+struct IntType;
+struct FloatType;
+
 struct Point
 {
+    Point( float a, float b ) : x( a ), y( b ) {}
+    Point( const FloatType& ft );
+    Point( const DoubleType& dt );
+    Point( const IntType& it );
+
     Point& multiply(float m)
     {
         x *= m;
         y *= m;
         return *this;
     }
+    Point& multiply( const FloatType& ft );
+    Point& multiply( const DoubleType& dt );
+    Point& multiply( const IntType& it );
+
+    void toString()
+    {
+        std::cout << "The x coordinate is: " << x << "\nThe y coordinate is: " << y << std::endl;
+    }
+
 private:
     float x{0}, y{0};
 };
-
-
-
-
-
-#include <iostream>
 
 struct FloatType
 {
@@ -84,15 +99,22 @@ struct FloatType
         a = nullptr;
     }
 
-    operator float() { return *a; }
+    operator float() const { return *a; }
 
     FloatType& add( float rhs );
     FloatType& subtract( float rhs );
     FloatType& multiply( float rhs );
     FloatType& divide( float rhs );
 
+    FloatType& pow( float rhs );
+    FloatType& pow( const FloatType& rhs );
+    FloatType& pow( const DoubleType& rhs );
+    FloatType& pow( const IntType& rhs );
+
     private:
     float* a;
+
+    FloatType& powInternal( const float value );
 };
 
 FloatType& FloatType::add( float rhs )
@@ -132,15 +154,22 @@ struct DoubleType
         a = nullptr;
     }
 
-    operator double() { return *a; }
+    operator double() const { return *a; }
 
     DoubleType& add( double rhs );
     DoubleType& subtract( double rhs );
     DoubleType& multiply( double rhs );
     DoubleType& divide( double rhs );
 
+    DoubleType& pow( double rhs );
+    DoubleType& pow( const FloatType& rhs );
+    DoubleType& pow( const DoubleType& rhs );
+    DoubleType& pow( const IntType& rhs );
+
     private:
     double* a;
+
+    DoubleType& powInternal( const double value );
 };
 
 DoubleType& DoubleType:: add( double rhs )
@@ -181,15 +210,22 @@ struct IntType
         a = nullptr;
     }
 
-    operator int() { return *a; }
+    operator int() const { return *a; }
 
     IntType& add( int rhs );
     IntType& subtract( int rhs );
     IntType& multiply( int rhs );
     IntType& divide( int rhs );
 
+    IntType& pow( int rhs );
+    IntType& pow( const FloatType& rhs );
+    IntType& pow( const DoubleType& rhs );
+    IntType& pow( const IntType& rhs );
+
     private:
     int* a;
+    
+    IntType& powInternal( const int value );
 };
 
 IntType& IntType::add( int rhs )
@@ -220,6 +256,119 @@ IntType& IntType::divide( int rhs )
     }
     *a /= rhs;
     return *this;
+}
+
+/* Power Function Definitions */
+
+FloatType& FloatType::powInternal( const float value )
+{
+    if ( a != nullptr )
+        *a = std::pow( *a, value );
+
+    return *this;
+}
+
+FloatType& FloatType::pow( float rhs )
+{
+    return powInternal( rhs );
+}
+
+FloatType& FloatType::pow( const FloatType& rhs )
+{
+    return powInternal( static_cast<float>(rhs) );
+}
+
+FloatType& FloatType::pow( const DoubleType& rhs )
+{
+    return powInternal( static_cast<float>(rhs) );
+}
+
+FloatType& FloatType::pow( const IntType& rhs )
+{
+    return powInternal( static_cast<float>(rhs) );
+}
+
+//===========================================//
+
+DoubleType& DoubleType::powInternal( const double value )
+{
+    if ( a != nullptr )
+        *a = std::pow( *a, value );
+
+    return *this;
+}
+
+DoubleType& DoubleType::pow( double rhs )
+{
+    return powInternal( rhs );
+}
+
+DoubleType& DoubleType::pow( const FloatType& rhs )
+{
+    return powInternal( static_cast<double>(rhs) );
+}
+
+DoubleType& DoubleType::pow( const DoubleType& rhs )
+{
+    return powInternal( static_cast<double>(rhs) );
+}
+
+DoubleType& DoubleType::pow( const IntType& rhs )
+{
+    return powInternal( static_cast<double>(rhs) );
+}
+
+//===========================================//
+
+IntType& IntType::powInternal( const int value )
+{
+    if ( a != nullptr )
+        *a = std::pow( *a, value );
+
+    return *this;
+}
+
+IntType& IntType::pow( int rhs )
+{
+    return powInternal( rhs );
+}
+
+IntType& IntType::pow( const FloatType& rhs )
+{
+    return powInternal( static_cast<int>(rhs) );
+}
+
+IntType& IntType::pow( const DoubleType& rhs )
+{
+    return powInternal( static_cast<int>(rhs) );
+}
+
+IntType& IntType::pow( const IntType& rhs )
+{
+    return powInternal( static_cast<int>(rhs) );
+}
+
+/* Point UDT Implementation */
+
+Point::Point( const FloatType& ft ) : Point( ft, ft) {}
+
+Point::Point( const DoubleType& dt ) : Point ( static_cast<float>(dt), static_cast<float>(dt) ) {}
+
+Point::Point( const IntType& it ) : Point ( static_cast<int>(it), static_cast<int>(it) ) {}
+
+Point& Point::multiply( const FloatType& ft )
+{
+    return multiply( static_cast<float>(ft) );
+}
+
+Point& Point::multiply( const DoubleType& dt )
+{
+    return multiply( static_cast<float>(dt) );
+}
+
+Point& Point::multiply( const IntType& it )
+{
+    return multiply( static_cast<float>(it) );
 }
 
 void divider()
@@ -256,6 +405,43 @@ int main()
     divider();
 
     std::cout << "But we can use all types together.  The result of 'dt' time 'it' plus 'ft' is: " << static_cast<double>( dt.multiply( static_cast<int>(it) ).add( static_cast<double>(ft) ) ) <<std::endl;
+
+    divider();
+
+    std::cout << "Ft is currently: " << static_cast<float>(ft) << std::endl;
+    std::cout << "ft pow of 3: " << ft.pow( 3 ) << std::endl;
+    std::cout << "it is currently: " << static_cast<int>(it) << std::endl;
+    std::cout << "it pow of 2: " << it.pow( 2 ) << std::endl;
+    std::cout << "dt is currently: " << static_cast<double>(dt) << std::endl;
+    std::cout << "dt pow of 1.2: " << dt.pow( 1.2 ) << std::endl;
+
+    std::cout << "Chaining makes ridiculous numbers: " << ft.pow(it).pow(3) << std::endl;
+
+    divider();
+
+    Point pt( 2.f, 3.f );
+
+    std::cout << "pt's initial points are:\n";
+    pt.toString();
+
+    std::cout << "pt multiplied by ft is:\n";
+    pt.multiply(ft);
+    pt.toString();
+
+    std::cout << "then pt multiplied by it is:\n";
+    pt.multiply(it);
+    pt.toString();
+
+    DoubleType dtp( 5.67893 );
+    Point pdt( dtp );
+
+    divider();
+
+    std::cout << "pdt initialized with a DoubleType has these points:\n";
+    pdt.toString();
+    std::cout << "And then multiplied by the initializing DoubleType moves the point:\n";
+    pdt.multiply(dtp);
+    pdt.toString();
 
     divider();
 
