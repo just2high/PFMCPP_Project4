@@ -323,7 +323,7 @@ DoubleType& DoubleType::pow( const IntType& rhs )
 IntType& IntType::powInternal( const int value )
 {
     if ( a != nullptr )
-        *a = std::pow( *a, value );
+        *a = static_cast<int>( std::pow( *a, value ) );
 
     return *this;
 }
