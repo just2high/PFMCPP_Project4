@@ -533,12 +533,17 @@ int main()
     std::cout << "pt's initial points are:\n";
     pt.toString();
 
+    pt *= static_cast<float>(ft);
+
     std::cout << "pt multiplied by ft is:\n";
-    pt.multiply(ft);
+    // pt.multiply(ft);
     pt.toString();
 
+    pt *= static_cast<float>(it);
+
+
     std::cout << "then pt multiplied by it is:\n";
-    pt.multiply(it);
+    // pt.multiply(it);
     pt.toString();
 
     DoubleType dtp( 5.67893 );
@@ -549,7 +554,10 @@ int main()
     std::cout << "pdt initialized with a DoubleType has these points:\n";
     pdt.toString();
     std::cout << "And then multiplied by the initializing DoubleType moves the point:\n";
-    pdt.multiply(dtp);
+    // pdt.multiply(dtp);
+
+    pdt *= static_cast<float>(dtp);
+
     pdt.toString();
 
     divider();
