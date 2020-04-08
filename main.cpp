@@ -121,6 +121,30 @@ struct FloatType
     FloatType& pow( const DoubleType& rhs );
     FloatType& pow( const IntType& rhs );
 
+    FloatType& operator+=( float rhs )
+    {
+        *a += rhs;
+        return *this;
+    }
+
+    FloatType& operator -=( float rhs )
+    {
+        *a -= rhs;
+        return *this;
+    }
+
+    FloatType& operator *=( float rhs )
+    {
+        *a *= rhs;
+        return *this;
+    }
+
+    FloatType& operator/=( float rhs )
+    {
+        *a /= rhs;
+        return*this;
+    } 
+
     private:
     float* a;
 
@@ -175,6 +199,31 @@ struct DoubleType
     DoubleType& pow( const FloatType& rhs );
     DoubleType& pow( const DoubleType& rhs );
     DoubleType& pow( const IntType& rhs );
+
+    DoubleType& operator+=( double rhs )
+    {
+        *a += rhs;
+        return *this;
+    }
+
+    DoubleType& operator -=( double rhs )
+    {
+        *a -= rhs;
+        return *this;
+    }
+
+    DoubleType& operator *=( double rhs )
+    {
+        *a *= rhs;
+        return *this;
+    }
+
+    DoubleType& operator/=( double rhs )
+    {
+        *a /= rhs;
+        return*this;
+    } 
+
 
     private:
     double* a;
@@ -231,6 +280,30 @@ struct IntType
     IntType& pow( const FloatType& rhs );
     IntType& pow( const DoubleType& rhs );
     IntType& pow( const IntType& rhs );
+
+    IntType& operator+=( int rhs )
+    {
+        *a += rhs;
+        return *this;
+    }
+
+    IntType& operator -=( int rhs )
+    {
+        *a -= rhs;
+        return *this;
+    }
+
+    IntType& operator *=( int rhs )
+    {
+        *a *= rhs;
+        return *this;
+    }
+
+    IntType& operator/=( int rhs )
+    {
+        *a /= rhs;
+        return*this;
+    } 
 
     private:
     int* a;
@@ -400,8 +473,11 @@ int main()
 
     divider();
 
-    std::cout << "We can add (5.4) to ft and multiply it by (6) which equals: " << static_cast<float>( ft.add(5.4f).multiply(6) ) << std::endl;
+    ft += 5.4f;
+    ft *= 6;
 
+    std::cout << "We can add (5.4) to ft and multiply it by (6) which equals: " << static_cast<float>(ft) << std::endl;
+/* 
     std::cout << "We can divde dt by (2.2) and add (0.86) which equals: " << static_cast<double>(dt.divide(2.2).add(0.86) ) << std::endl;
 
     std::cout << "We can subtract (10) from it and multiply by (12) and divide by ft(" << static_cast<float>(ft) << ") which equals: " << static_cast<int>( it.subtract(10).multiply(102).divide( static_cast<int>(ft) ) ) << std::endl;
@@ -453,7 +529,7 @@ int main()
     pdt.multiply(dtp);
     pdt.toString();
 
-    divider();
+    divider(); */
 
     std::cout << "good to go!" << std::endl;
 }
