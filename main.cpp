@@ -91,6 +91,11 @@ struct Point
     Point& multiply( const DoubleType& dt );
     Point& multiply( const IntType& it );
 
+    Point& operator*=( float m )
+    {
+        return multiply( m );
+    }
+
     void toString()
     {
         std::cout << "The x coordinate is: " << x << "\nThe y coordinate is: " << y << std::endl;
@@ -120,6 +125,30 @@ struct FloatType
     FloatType& pow( const FloatType& rhs );
     FloatType& pow( const DoubleType& rhs );
     FloatType& pow( const IntType& rhs );
+
+    FloatType& operator+=( float rhs )
+    {
+        *a += rhs;
+        return *this;
+    }
+
+    FloatType& operator -=( float rhs )
+    {
+        *a -= rhs;
+        return *this;
+    }
+
+    FloatType& operator *=( float rhs )
+    {
+        *a *= rhs;
+        return *this;
+    }
+
+    FloatType& operator/=( float rhs )
+    {
+        *a /= rhs;
+        return*this;
+    } 
 
     private:
     float* a;
@@ -176,6 +205,31 @@ struct DoubleType
     DoubleType& pow( const DoubleType& rhs );
     DoubleType& pow( const IntType& rhs );
 
+    DoubleType& operator+=( double rhs )
+    {
+        *a += rhs;
+        return *this;
+    }
+
+    DoubleType& operator -=( double rhs )
+    {
+        *a -= rhs;
+        return *this;
+    }
+
+    DoubleType& operator *=( double rhs )
+    {
+        *a *= rhs;
+        return *this;
+    }
+
+    DoubleType& operator/=( double rhs )
+    {
+        *a /= rhs;
+        return*this;
+    } 
+
+
     private:
     double* a;
 
@@ -231,6 +285,36 @@ struct IntType
     IntType& pow( const FloatType& rhs );
     IntType& pow( const DoubleType& rhs );
     IntType& pow( const IntType& rhs );
+
+    IntType& operator+=( int rhs )
+    {
+        *a += rhs;
+        return *this;
+    }
+
+    IntType& operator -=( int rhs )
+    {
+        *a -= rhs;
+        return *this;
+    }
+
+    IntType& operator *=( int rhs )
+    {
+        *a *= rhs;
+        return *this;
+    }
+
+    IntType& operator/=( int rhs )
+    {
+        if( rhs == 0 )
+        {
+            std::cout << "warning, trying to divide by 0\n";
+            std::cout << "Current value of IntType: ";
+            return *this;
+        }
+        *a /= rhs;
+        return*this;
+    } 
 
     private:
     int* a;
@@ -394,27 +478,40 @@ int main()
     DoubleType dt(8.473276);
     IntType it(19);
 
-    std::cout << "The starting value of FloatType ft is: " << static_cast<float>(ft) << std::endl;
-    std::cout << "The starting value of DoubleType dt is: " << static_cast<double>(dt) << std::endl;
-    std::cout << "The starting value of IntType it is: " << static_cast<int>(it) << std::endl;
+    std::cout << "The starting value of FloatType 'ft' is: " << static_cast<float>(ft) << std::endl;
+    std::cout << "The starting value of DoubleType 'dt' is: " << static_cast<double>(dt) << std::endl;
+    std::cout << "The starting value of IntType 'it' is: " << static_cast<int>(it) << std::endl;
 
     divider();
 
-    std::cout << "We can add (5.4) to ft and multiply it by (6) which equals: " << static_cast<float>( ft.add(5.4f).multiply(6) ) << std::endl;
+    ft += 5.4f;
+    ft *= 6;
 
-    std::cout << "We can divde dt by (2.2) and add (0.86) which equals: " << static_cast<double>(dt.divide(2.2).add(0.86) ) << std::endl;
+    std::cout << "We can add (5.4) to 'ft' and multiply 'it' by (6) which equals: " << static_cast<float>(ft) << std::endl;
+ 
+    dt /= 2.2;
+    dt += 0.86;
 
-    std::cout << "We can subtract (10) from it and multiply by (12) and divide by ft(" << static_cast<float>(ft) << ") which equals: " << static_cast<int>( it.subtract(10).multiply(102).divide( static_cast<int>(ft) ) ) << std::endl;
+    std::cout << "We can divde 'dt' by (2.2) and add (0.86) which equals: " << static_cast<double>(dt) << std::endl;
 
+    it -= 10;
+    it *= 12;
+    it /= static_cast<int>(ft);
+
+    std::cout << "We can subtract (10) from 'it' and multiply by (12) and divide by ft(" << static_cast<float>(ft) << ") which equals: " << static_cast<int>(it) << std::endl;
+ 
     divider();
 
-    std::cout << "We will find that we cannot divide it by a number less than 1:\n"; 
+    std::cout << "We will find that we cannot divide 'it' by a number less than 1:\n"; 
     std::cout << "it(" << static_cast<int>(it) << ") divided by 0.2 throws an error:\n";
-    std::cout << it.divide(static_cast<int>(0.2)) << std::endl;
+    std::cout << ( it /= static_cast<int>(0.2) ) << std::endl;
 
     divider();
 
-    std::cout << "But we can use all types together.  The result of 'dt' time 'it' plus 'ft' is: " << static_cast<double>( dt.multiply( static_cast<int>(it) ).add( static_cast<double>(ft) ) ) <<std::endl;
+    dt *= static_cast<double>(it);
+    dt += static_cast<double>(ft);
+
+    std::cout << "But we can use all types together.  The result of 'dt' times 'it' plus 'ft' is: " << static_cast<double>(dt) <<std::endl;
 
     divider();
 
@@ -434,12 +531,17 @@ int main()
     std::cout << "pt's initial points are:\n";
     pt.toString();
 
+    pt *= static_cast<float>(ft);
+
     std::cout << "pt multiplied by ft is:\n";
-    pt.multiply(ft);
+    // pt.multiply(ft);
     pt.toString();
 
+    pt *= static_cast<float>(it);
+
+
     std::cout << "then pt multiplied by it is:\n";
-    pt.multiply(it);
+    // pt.multiply(it);
     pt.toString();
 
     DoubleType dtp( 5.67893 );
@@ -450,7 +552,10 @@ int main()
     std::cout << "pdt initialized with a DoubleType has these points:\n";
     pdt.toString();
     std::cout << "And then multiplied by the initializing DoubleType moves the point:\n";
-    pdt.multiply(dtp);
+    // pdt.multiply(dtp);
+
+    pdt *= static_cast<float>(dtp);
+
     pdt.toString();
 
     divider();
