@@ -93,9 +93,7 @@ struct Point
 
     Point& operator*=( float m )
     {
-        x *= m;
-        y *= m;
-        return *this;
+        return multiply( m );
     }
 
     void toString()
