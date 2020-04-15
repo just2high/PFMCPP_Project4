@@ -58,6 +58,7 @@ send me a DM to check your pull request
 
 #include <iostream>
 #include <cmath>
+#include <functional>
 
 struct DoubleType;
 struct IntType;
@@ -104,6 +105,9 @@ struct FloatType
     }
 
     operator float() const { return *a; }
+
+    void apply( std::function<FloatType&( float )>add );
+    void apply();
 
     FloatType& add( float rhs );
     FloatType& subtract( float rhs );
