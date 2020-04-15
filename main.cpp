@@ -106,8 +106,10 @@ struct FloatType
 
     operator float() const { return *a; }
 
-    void apply( std::function<FloatType&( float )>add );
-    void apply();
+    FloatType& apply( std::function< float&( FloatType& )>add );
+
+    using funcPtr = FloatType&(*)(float);
+    void apply( funcPtr func );
 
     FloatType& add( float rhs );
     FloatType& subtract( float rhs );
