@@ -106,10 +106,20 @@ struct FloatType
 
     operator float() const { return *a; }
 
-    FloatType& apply( std::function< float&( FloatType& )>add );
+    FloatType& apply( std::function< FloatType&( float& )> func )
+    {
+        if (func != nullptr )
+            return func( *a );
+        return *this;
+    }
 
     using funcPtr = void(*)( float& );
-    FloatType& apply( funcPtr func );
+    FloatType& apply( funcPtr func )
+    {
+        if ( func != nullptr )
+            func( *a );
+        return *this;
+    }
 
     FloatType& add( float rhs );
     FloatType& subtract( float rhs );
