@@ -108,8 +108,8 @@ struct FloatType
 
     FloatType& apply( std::function< float&( FloatType& )>add );
 
-    using funcPtr = FloatType&(*)(float);
-    void apply( funcPtr func );
+    using funcPtr = void(*)( float& );
+    FloatType& apply( funcPtr func );
 
     FloatType& add( float rhs );
     FloatType& subtract( float rhs );
