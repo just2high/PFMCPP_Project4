@@ -58,6 +58,7 @@ send me a DM to check your pull request
 
 #include <iostream>
 #include <cmath>
+#include <functional>
 
 struct DoubleType;
 struct IntType;
@@ -104,6 +105,23 @@ struct FloatType
     }
 
     operator float() const { return *a; }
+
+    FloatType& apply( std::function< FloatType&( float& )> func )
+    {
+        if (func != nullptr )
+            return func( *a );
+
+        std::cout << "Warning, nullptr, can't apply.\n";
+        return *this;
+    }
+
+    using FuncPtr = void(*)( float& );
+    FloatType& apply( FuncPtr func )
+    {
+        if ( func != nullptr )
+            func( *a );
+        return *this;
+    }
 
     FloatType& add( float rhs );
     FloatType& subtract( float rhs );
@@ -183,6 +201,23 @@ struct DoubleType
     }
 
     operator double() const { return *a; }
+
+    DoubleType& apply( std::function<DoubleType&( double& )> func )
+    {
+        if (func != nullptr )
+            return func( *a );
+
+        std::cout << "Warning, nullptr, can't apply.\n";
+        return *this;
+    }
+
+    using FuncPtr = void(*)( double& );
+    DoubleType& apply ( FuncPtr func )
+    {
+        if ( func != nullptr )
+            func( *a );
+        return *this;
+    }
 
     DoubleType& add( double rhs );
     DoubleType& subtract( double rhs );
@@ -264,6 +299,23 @@ struct IntType
     }
 
     operator int() const { return *a; }
+
+    IntType& apply( std::function<IntType&( int& )> func )
+    {
+        if (func != nullptr )
+            return func( *a );
+
+        std::cout << "Warning, nullptr, can't apply.\n";
+        return *this;
+    }
+
+    using FuncPtr = void(*)( int& );
+    IntType& apply ( FuncPtr func )
+    {
+        if ( func != nullptr )
+            func( *a );
+        return *this;
+    }
 
     IntType& add( int rhs );
     IntType& subtract( int rhs );
@@ -454,6 +506,23 @@ Point& Point::multiply( const IntType& it )
     return multiply( static_cast<float>(it) );
 }
 
+/*         Free Functions               */
+
+void updateValue( float& value)
+{
+    value += value;
+}
+
+void updateValue( double& value)
+{
+    value += value;
+}
+
+void updateValue( int& value)
+{
+    value += value;
+}
+
 void divider()
 {
     std::cout << "\n\n===============================\n\n";
@@ -546,6 +615,62 @@ int main()
     pdt *= static_cast<float>(dtp);
 
     pdt.toString();
+
+    divider();
+
+    std::cout << "The apply() function applies the current value of the current object to itself.\n\n";
+
+    FloatType ftA(4.5f);
+
+    std::cout << "FtA is currently: " << static_cast<float>(ftA) << std::endl;
+    
+    ftA.apply( [&ftA]( float &a ) -> FloatType&
+    {
+        a += a;
+        return ftA;    
+    } );
+    
+    std::cout << "FtA applied to itself by lambda is: " << static_cast<float>(ftA) << std::endl;
+
+    ftA.apply( updateValue );
+
+    std::cout << "FtA applied to itself via function pointer is: " << static_cast<float>(ftA) << std::endl;
+
+    divider();
+
+    DoubleType dtA(7.894561);
+
+    std::cout << "dtA is currently: " << static_cast<double>(dtA) << std::endl;
+    
+    dtA.apply( [&dtA]( double &a ) -> DoubleType&
+    {
+        a += a;
+        return dtA;    
+    } );
+    
+    std::cout << "dtA applied to itself by lambda is: " << static_cast<double>(dtA) << std::endl;
+
+    dtA.apply( updateValue );
+
+    std::cout << "dtA applied to itself via function pointer is: " << static_cast<double>(dtA) << std::endl;
+
+    divider();
+
+    IntType itA(495);
+
+    std::cout << "itA is currently: " << static_cast<int>(itA) << std::endl;
+    
+    itA.apply( [&itA]( int &a ) -> IntType&
+    {
+        a += a;
+        return itA;    
+    } );
+    
+    std::cout << "itA applied to itself by lambda is: " << static_cast<int>(itA) << std::endl;
+
+    itA.apply( updateValue );
+
+    std::cout << "itA applied to itself via function pointer is: " << static_cast<int>(itA) << std::endl;
 
     divider();
 
