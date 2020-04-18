@@ -109,12 +109,13 @@ struct FloatType
     FloatType& apply( std::function< FloatType&( float& )> func )
     {
         if (func != nullptr )
-            func( *a );
-        return *this;
+            return func( *a );
+        else
+            std::cout << "Warning, nullptr.\n";
     }
 
-    using funcPtr = void(*)( float& );
-    FloatType& apply( funcPtr func )
+    using FuncPtr = void(*)( float& );
+    FloatType& apply( FuncPtr func )
     {
         if ( func != nullptr )
             func( *a );
@@ -203,12 +204,13 @@ struct DoubleType
     DoubleType& apply( std::function<DoubleType&( double& )> func )
     {
         if( func != nullptr )
-            func( *a );
-        return *this;
+            return func( *a );
+        else
+            std::cout << "Warning, nullptr.\n";
     }
 
-    using funcPtr = void(*)( double& );
-    DoubleType& apply ( funcPtr func )
+    using FuncPtr = void(*)( double& );
+    DoubleType& apply ( FuncPtr func )
     {
         if ( func != nullptr )
             func( *a );
@@ -299,12 +301,13 @@ struct IntType
     IntType& apply( std::function<IntType&( int& )> func )
     {
         if ( func != nullptr )
-            func( *a );
-        return *this;
+            return func( *a );
+        else
+            std::cout << "Warning, nullptr.\n";
     }
 
-    using funcPtr = void(*)( int& );
-    IntType& apply ( funcPtr func )
+    using FuncPtr = void(*)( int& );
+    IntType& apply ( FuncPtr func )
     {
         if ( func != nullptr )
             func( *a );
@@ -618,7 +621,7 @@ int main()
 
     std::cout << "FtA is currently: " << static_cast<float>(ftA) << std::endl;
     
-    ftA.apply( [&]( float &a ) -> FloatType&
+    ftA.apply( [&ftA]( float &a ) -> FloatType&
     {
         a += a;
         return ftA;    
@@ -636,7 +639,7 @@ int main()
 
     std::cout << "dtA is currently: " << static_cast<double>(dtA) << std::endl;
     
-    dtA.apply( [&]( double &a ) -> DoubleType&
+    dtA.apply( [&dtA]( double &a ) -> DoubleType&
     {
         a += a;
         return dtA;    
@@ -654,7 +657,7 @@ int main()
 
     std::cout << "itA is currently: " << static_cast<int>(itA) << std::endl;
     
-    itA.apply( [&]( int &a ) -> IntType&
+    itA.apply( [&itA]( int &a ) -> IntType&
     {
         a += a;
         return itA;    
