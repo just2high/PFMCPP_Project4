@@ -109,10 +109,14 @@ struct FloatType
     FloatType& apply( std::function< FloatType&( float& )> func )
     {
         if (func != nullptr )
+        {
             return func( *a );
+        }           
         else
+        {
             std::cout << "Warning, nullptr, can't apply.\n";
             return *this;
+        }
     }
 
     using FuncPtr = void(*)( float& );
@@ -204,11 +208,15 @@ struct DoubleType
 
     DoubleType& apply( std::function<DoubleType&( double& )> func )
     {
-        if( func != nullptr )
+        if (func != nullptr )
+        {
             return func( *a );
+        }           
         else
+        {
             std::cout << "Warning, nullptr, can't apply.\n";
             return *this;
+        }
     }
 
     using FuncPtr = void(*)( double& );
@@ -302,11 +310,15 @@ struct IntType
 
     IntType& apply( std::function<IntType&( int& )> func )
     {
-        if ( func != nullptr )
+        if (func != nullptr )
+        {
             return func( *a );
+        }           
         else
+        {
             std::cout << "Warning, nullptr, can't apply.\n";
             return *this;
+        }
     }
 
     using FuncPtr = void(*)( int& );
