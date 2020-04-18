@@ -111,7 +111,8 @@ struct FloatType
         if (func != nullptr )
             return func( *a );
         else
-            std::cout << "Warning, nullptr.\n";
+            std::cout << "Warning, nullptr, can't apply.\n";
+            return *this;
     }
 
     using FuncPtr = void(*)( float& );
@@ -206,7 +207,8 @@ struct DoubleType
         if( func != nullptr )
             return func( *a );
         else
-            std::cout << "Warning, nullptr.\n";
+            std::cout << "Warning, nullptr, can't apply.\n";
+            return *this;
     }
 
     using FuncPtr = void(*)( double& );
@@ -303,7 +305,8 @@ struct IntType
         if ( func != nullptr )
             return func( *a );
         else
-            std::cout << "Warning, nullptr.\n";
+            std::cout << "Warning, nullptr, can't apply.\n";
+            return *this;
     }
 
     using FuncPtr = void(*)( int& );
