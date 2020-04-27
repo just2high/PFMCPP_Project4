@@ -91,41 +91,6 @@ If you need to view an example, see: https://bitbucket.org/MatkatMusic/pfmcpptas
 #include <cmath>
 #include <functional>
 
-struct DoubleType;
-struct IntType;
-struct FloatType;
-
-struct Point
-{
-    Point( float a, float b ) : x( a ), y( b ) {}
-    Point( const FloatType& ft );
-    Point( const DoubleType& dt );
-    Point( const IntType& it );
-
-    Point& multiply(float m)
-    {
-        x *= m;
-        y *= m;
-        return *this;
-    }
-    Point& multiply( const FloatType& ft );
-    Point& multiply( const DoubleType& dt );
-    Point& multiply( const IntType& it );
-
-    Point& operator*=( float m )
-    {
-        return multiply( m );
-    }
-
-    void toString()
-    {
-        std::cout << "The x coordinate is: " << x << "\nThe y coordinate is: " << y << std::endl;
-    }
-
-private:
-    float x{0}, y{0};
-};
-
 template <typename T>
 struct TypeHolder
 {
@@ -191,8 +156,42 @@ struct TypeHolder
         return *this;
     }
 };
+/*
+struct DoubleType;
+struct IntType;
+struct FloatType;
 
-/* Point UDT Implementation */
+struct Point
+{
+    Point( float a, float b ) : x( a ), y( b ) {}
+    Point( const FloatType& ft );
+    Point( const DoubleType& dt );
+    Point( const IntType& it );
+
+    Point& multiply(float m)
+    {
+        x *= m;
+        y *= m;
+        return *this;
+    }
+    Point& multiply( const FloatType& ft );
+    Point& multiply( const DoubleType& dt );
+    Point& multiply( const IntType& it );
+
+    Point& operator*=( float m )
+    {
+        return multiply( m );
+    }
+
+    void toString()
+    {
+        std::cout << "The x coordinate is: " << x << "\nThe y coordinate is: " << y << std::endl;
+    }
+
+private:
+    float x{0}, y{0};
+};
+// Point UDT Implementation //
 
 Point::Point( const FloatType& ft ) : Point( ft, ft) {}
 
@@ -214,20 +213,11 @@ Point& Point::multiply( const IntType& it )
 {
     return multiply( static_cast<float>(it) );
 }
-
+*/
 /*         Free Functions               */
 
-void updateValue( float& value)
-{
-    value += value;
-}
-
-void updateValue( double& value)
-{
-    value += value;
-}
-
-void updateValue( int& value)
+template <typename T>
+void updateValue( T& value)
 {
     value += value;
 }
@@ -240,10 +230,10 @@ void divider()
 int main()
 { 
     divider();
-/*
-    FloatType ft(3.2f);
-    DoubleType dt(8.473276);
-    IntType it(19);
+
+    TypeHolder<float> ft(3.2f);
+    TypeHolder<double> dt(8.473276);
+    TypeHolder<int> it(19);
 
     std::cout << "The starting value of FloatType 'ft' is: " << static_cast<float>(ft) << std::endl;
     std::cout << "The starting value of DoubleType 'dt' is: " << static_cast<double>(dt) << std::endl;
@@ -292,7 +282,7 @@ int main()
     std::cout << "Chaining makes ridiculous numbers: " << ft.pow(it).pow(3) << std::endl;
 
     divider();
-
+/*
     Point pt( 2.f, 3.f );
 
     std::cout << "pt's initial points are:\n";
@@ -324,12 +314,12 @@ int main()
     pdt *= static_cast<float>(dtp);
 
     pdt.toString();
-
+*/
     divider();
-
+/*
     std::cout << "The apply() function applies the current value of the current object to itself.\n\n";
 
-    FloatType ftA(4.5f);
+    TypeHolder<float> ftA(4.5f);
 
     std::cout << "FtA is currently: " << static_cast<float>(ftA) << std::endl;
     
@@ -347,7 +337,7 @@ int main()
 
     divider();
 
-    DoubleType dtA(7.894561);
+    TypeHolder<double> dtA(7.894561);
 
     std::cout << "dtA is currently: " << static_cast<double>(dtA) << std::endl;
     
@@ -365,7 +355,7 @@ int main()
 
     divider();
 
-    IntType itA(495);
+    TypeHolder<int> itA(495);
 
     std::cout << "itA is currently: " << static_cast<int>(itA) << std::endl;
     
