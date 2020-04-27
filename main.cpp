@@ -152,10 +152,10 @@ struct TypeHolder
         return *this;
     }
 
-    TypeHolder& pow( Primitive rhs );
-    TypeHolder& pow( const TypeHolder& rhs );
-    TypeHolder& pow( const DoubleType& rhs );
-    TypeHolder& pow( const IntType& rhs );
+    TypeHolder& pow( Primitive rhs )
+    {
+        return powInternal ( rhs );
+    }
 
     TypeHolder& operator+=( Primitive rhs )
     {
@@ -184,28 +184,13 @@ struct TypeHolder
     private:
     std::unique_ptr<Primitive> a;
 
-    TypeHolder& powInternal( const Primitive value );
+    TypeHolder& powInternal( const Primitive value )
+    {
+        if( a != nullptr )
+            *a = std::pow( *a, value );
+        return *this;
+    }
 };
-
-/* Power Function Definitions */
-
-TypeHolder& TypeHolder::powInternal( const Primitive value )
-{
-    if ( a != nullptr )
-        *a = std::pow( *a, value );
-
-    return *this;
-}
-
-TypeHolder& TypeHolder::pow( float rhs )
-{
-    return powInternal( rhs );
-}
-
-TypeHolder& TypeHolder::pow( const TypeHolder& rhs )
-{
-    return powInternal( static_cast<float>(rhs) );
-}
 
 /* Point UDT Implementation */
 
