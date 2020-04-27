@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <memory>
 /*
 Project 4: Part 7 / 9
 Video: Chapter 5 Part 4
@@ -125,18 +126,16 @@ private:
     float x{0}, y{0};
 };
 
-struct FloatType
+template <typename Primitive>
+struct TypeHolder
 {
-    FloatType( float varA ) : a( new float(varA) ) {}
-    ~FloatType()
-    {
-        delete a;
-        a = nullptr;
-    }
+    using Primitive = T;
 
-    operator float() const { return *a; }
+    TypeHolder( Primitive varA ) : a( new Primitive(varA) ) {}
 
-    FloatType& apply( std::function< FloatType&( float& )> func )
+    operator Primitive() const { return *a; }
+
+    TypeHolder& apply( std::function< TypeHolder&( Primitive& )> func )
     {
         if (func != nullptr )
             return func( *a );
@@ -145,73 +144,73 @@ struct FloatType
         return *this;
     }
 
-    using FuncPtr = void(*)( float& );
-    FloatType& apply( FuncPtr func )
+    using FuncPtr = void(*)( Primitive& );
+    TypeHolder& apply( FuncPtr func )
     {
         if ( func != nullptr )
             func( *a );
         return *this;
     }
 
-    FloatType& add( float rhs );
-    FloatType& subtract( float rhs );
-    FloatType& multiply( float rhs );
-    FloatType& divide( float rhs );
+    TypeHolder& add( Primitive rhs );
+    TypeHolder& subtract( Primitive rhs );
+    TypeHolder& multiply( Primitive rhs );
+    TypeHolder& divide( Primitive rhs );
 
-    FloatType& pow( float rhs );
-    FloatType& pow( const FloatType& rhs );
-    FloatType& pow( const DoubleType& rhs );
-    FloatType& pow( const IntType& rhs );
+    TypeHolder& pow( Primitive rhs );
+    TypeHolder& pow( const TypeHolder& rhs );
+    TypeHolder& pow( const DoubleType& rhs );
+    TypeHolder& pow( const IntType& rhs );
 
-    FloatType& operator+=( float rhs )
+    TypeHolder& operator+=( Primitive rhs )
     {
         *a += rhs;
         return *this;
     }
 
-    FloatType& operator -=( float rhs )
+    TypeHolder& operator -=( Primitive rhs )
     {
         *a -= rhs;
         return *this;
     }
 
-    FloatType& operator *=( float rhs )
+    TypeHolder& operator *=( Primitive rhs )
     {
         *a *= rhs;
         return *this;
     }
 
-    FloatType& operator/=( float rhs )
+    TypeHolder& operator/=( Primitive rhs )
     {
         *a /= rhs;
         return*this;
     } 
 
     private:
-    float* a;
+    std::unique_ptr<Primitive> a;
 
-    FloatType& powInternal( const float value );
+    TypeHolder& powInternal( const Primitive value );
 };
 
-FloatType& FloatType::add( float rhs )
+TypeHolder& TypeHolder::add( Primitive rhs )
 {
     *a += rhs;
     return *this;
 }
 
-FloatType& FloatType::subtract( float rhs )
+TypeHolder& TypeHolder::subtract( Primitive rhs )
 {
     *a -= rhs;
     return *this;
 }
 
-FloatType& FloatType::multiply( float rhs )
+TypeHolder& TypeHolder::multiply( Primitive rhs )
 {
     *a *= rhs;
     return *this;
 }
 
-FloatType& FloatType::divide( float rhs )
+TypeHolder& TypeHolder::divide( Primitive rhs )
 {
     if( rhs == 0.f )
     {
@@ -220,7 +219,7 @@ FloatType& FloatType::divide( float rhs )
     *a /= rhs;
     return *this;
 }
-
+/*
 struct DoubleType
 {
     DoubleType ( double varA ) : a( new double(varA) ) {}
@@ -422,10 +421,10 @@ IntType& IntType::divide( int rhs )
     *a /= rhs;
     return *this;
 }
-
+*/
 /* Power Function Definitions */
 
-FloatType& FloatType::powInternal( const float value )
+TypeHolder& TypeHolder::powInternal( const Primitive value )
 {
     if ( a != nullptr )
         *a = std::pow( *a, value );
@@ -433,28 +432,28 @@ FloatType& FloatType::powInternal( const float value )
     return *this;
 }
 
-FloatType& FloatType::pow( float rhs )
+TypeHolder& TypeHolder::pow( float rhs )
 {
     return powInternal( rhs );
 }
 
-FloatType& FloatType::pow( const FloatType& rhs )
+TypeHolder& TypeHolder::pow( const TypeHolder& rhs )
+{
+    return powInternal( static_cast<float>(rhs) );
+}
+/*
+TypeHolder& TypeHolder::pow( const DoubleType& rhs )
 {
     return powInternal( static_cast<float>(rhs) );
 }
 
-FloatType& FloatType::pow( const DoubleType& rhs )
+TypeHolder& TypeHolder::pow( const IntType& rhs )
 {
     return powInternal( static_cast<float>(rhs) );
 }
-
-FloatType& FloatType::pow( const IntType& rhs )
-{
-    return powInternal( static_cast<float>(rhs) );
-}
-
+*/
 //===========================================//
-
+/*
 DoubleType& DoubleType::powInternal( const double value )
 {
     if ( a != nullptr )
@@ -512,7 +511,7 @@ IntType& IntType::pow( const IntType& rhs )
 {
     return powInternal( static_cast<int>(rhs) );
 }
-
+*/
 /* Point UDT Implementation */
 
 Point::Point( const FloatType& ft ) : Point( ft, ft) {}
@@ -561,7 +560,7 @@ void divider()
 int main()
 { 
     divider();
-
+/*
     FloatType ft(3.2f);
     DoubleType dt(8.473276);
     IntType it(19);
@@ -703,6 +702,6 @@ int main()
     std::cout << "itA applied to itself via function pointer is: " << static_cast<int>(itA) << std::endl;
 
     divider();
-
+*/
     std::cout << "good to go!" << std::endl;
 }
