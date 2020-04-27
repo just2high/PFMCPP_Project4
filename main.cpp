@@ -316,10 +316,11 @@ int main()
     pdt.toString();
 */
     divider();
-/*
+
     std::cout << "The apply() function applies the current value of the current object to itself.\n\n";
 
     TypeHolder<float> ftA(4.5f);
+    using FloatType = decltype(ftA);
 
     std::cout << "FtA is currently: " << static_cast<float>(ftA) << std::endl;
     
@@ -338,6 +339,7 @@ int main()
     divider();
 
     TypeHolder<double> dtA(7.894561);
+    using DoubleType = decltype(dtA);
 
     std::cout << "dtA is currently: " << static_cast<double>(dtA) << std::endl;
     
@@ -356,6 +358,7 @@ int main()
     divider();
 
     TypeHolder<int> itA(495);
+    using IntType = decltype(itA);
 
     std::cout << "itA is currently: " << static_cast<int>(itA) << std::endl;
     
@@ -372,6 +375,6 @@ int main()
     std::cout << "itA applied to itself via function pointer is: " << static_cast<int>(itA) << std::endl;
 
     divider();
-*/
+
     std::cout << "good to go!" << std::endl;
 }
