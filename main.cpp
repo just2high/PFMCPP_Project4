@@ -82,11 +82,6 @@ send me a DM to check your pull request
 If you need to view an example, see: https://bitbucket.org/MatkatMusic/pfmcpptasks/src/master/Projects/Project4/Part7Example.cpp
 */
 
-
-
-
-
-
 #include <iostream>
 #include <cmath>
 #include <functional>
@@ -156,17 +151,87 @@ struct TypeHolder
         return *this;
     }
 };
-/*
-struct DoubleType;
-struct IntType;
-struct FloatType;
+
+// DoubleType Templated Def
+template <>
+struct TypeHolder<double>
+{
+    using Primitive = double;
+
+    TypeHolder( Primitive varA ) : a( new Primitive(varA) ) {}
+
+    operator Primitive() const { return *a; }
+/* 
+ TypeHolder& apply( std::function< TypeHolder&( Primitive& )> func )
+    {
+        if (func != nullptr )
+            return func( *a );
+
+        std::cout << "Warning, nullptr, can't apply.\n";
+        return *this;
+    }
+
+    using FuncPtr = void(*)( Primitive& );
+    TypeHolder& apply( FuncPtr func )
+    {
+        if ( func != nullptr )
+            func( *a );
+        return *this;
+    } */
+
+
+    //template<typename FuncPtr>
+    using FuncPtr = void(*)( Primitive& );
+    TypeHolder& apply( FuncPtr func )
+    {
+        if ( func != nullptr )
+            func( *a );
+        return *this;
+    }
+
+    TypeHolder& pow( Primitive rhs )
+    {
+        return powInternal ( rhs );
+    }
+
+    TypeHolder& operator+=( Primitive rhs )
+    {
+        *a += rhs;
+        return *this;
+    }
+
+    TypeHolder& operator -=( Primitive rhs )
+    {
+        *a -= rhs;
+        return *this;
+    }
+
+    TypeHolder& operator *=( Primitive rhs )
+    {
+        *a *= rhs;
+        return *this;
+    }
+
+    TypeHolder& operator/=( Primitive rhs )
+    {
+        *a /= rhs;
+        return*this;
+    } 
+
+    private:
+    std::unique_ptr<Primitive> a;
+
+    TypeHolder& powInternal( const Primitive value )
+    {
+        if( a != nullptr )
+            *a = std::pow( *a, value );
+        return *this;
+    }
+};
 
 struct Point
 {
     Point( float a, float b ) : x( a ), y( b ) {}
-    Point( const FloatType& ft );
-    Point( const DoubleType& dt );
-    Point( const IntType& it );
 
     Point& multiply(float m)
     {
@@ -174,9 +239,6 @@ struct Point
         y *= m;
         return *this;
     }
-    Point& multiply( const FloatType& ft );
-    Point& multiply( const DoubleType& dt );
-    Point& multiply( const IntType& it );
 
     Point& operator*=( float m )
     {
@@ -191,29 +253,7 @@ struct Point
 private:
     float x{0}, y{0};
 };
-// Point UDT Implementation //
 
-Point::Point( const FloatType& ft ) : Point( ft, ft) {}
-
-Point::Point( const DoubleType& dt ) : Point ( static_cast<float>(dt), static_cast<float>(dt) ) {}
-
-Point::Point( const IntType& it ) : Point ( static_cast<int>(it), static_cast<int>(it) ) {}
-
-Point& Point::multiply( const FloatType& ft )
-{
-    return multiply( static_cast<float>(ft) );
-}
-
-Point& Point::multiply( const DoubleType& dt )
-{
-    return multiply( static_cast<float>(dt) );
-}
-
-Point& Point::multiply( const IntType& it )
-{
-    return multiply( static_cast<float>(it) );
-}
-*/
 /*         Free Functions               */
 
 template <typename T>
@@ -282,7 +322,7 @@ int main()
     std::cout << "Chaining makes ridiculous numbers: " << ft.pow(it).pow(3) << std::endl;
 
     divider();
-/*
+
     Point pt( 2.f, 3.f );
 
     std::cout << "pt's initial points are:\n";
@@ -291,30 +331,30 @@ int main()
     pt *= static_cast<float>(ft);
 
     std::cout << "pt multiplied by ft is:\n";
-    // pt.multiply(ft);
+
     pt.toString();
 
     pt *= static_cast<float>(it);
 
 
     std::cout << "then pt multiplied by it is:\n";
-    // pt.multiply(it);
+
     pt.toString();
 
-    DoubleType dtp( 5.67893 );
-    Point pdt( dtp );
+    TypeHolder<double> dtp( 5.67893 );
+    Point pdt( static_cast<float>(dtp), static_cast<float>(dtp) );
 
     divider();
 
     std::cout << "pdt initialized with a DoubleType has these points:\n";
     pdt.toString();
     std::cout << "And then multiplied by the initializing DoubleType moves the point:\n";
-    // pdt.multiply(dtp);
+
 
     pdt *= static_cast<float>(dtp);
 
     pdt.toString();
-*/
+
     divider();
 
     std::cout << "The apply() function applies the current value of the current object to itself.\n\n";
