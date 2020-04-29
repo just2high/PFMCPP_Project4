@@ -147,7 +147,7 @@ struct TypeHolder
     TypeHolder& powInternal( const Primitive value )
     {
         if( a != nullptr )
-            *a = std::pow( *a, value );
+            *a = static_cast<Primitive>( std::pow( *a, value ) ); // to avoid warning when converting into <int> type
         return *this;
     }
 };
@@ -180,8 +180,7 @@ struct TypeHolder<double>
     } */
 
 
-    //template<typename FuncPtr>
-    using FuncPtr = void(*)( Primitive& );
+    template<typename FuncPtr>
     TypeHolder& apply( FuncPtr func )
     {
         if ( func != nullptr )
