@@ -382,7 +382,7 @@ int main()
 
     std::cout << "dtA is currently: " << static_cast<double>(dtA) << std::endl;
     
-    dtA.apply( [&dtA]( double &a ) -> DoubleType&
+    dtA.apply( [&dtA]( std::unique_ptr<DoubleType::Primitive>& a ) -> DoubleType&
     {
         a += a;
         return dtA;    
