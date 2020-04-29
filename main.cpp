@@ -1,6 +1,3 @@
-
-#include <iostream>
-#include <memory>
 /*
 Project 4: Part 7 / 9
 Video: Chapter 5 Part 4
@@ -85,6 +82,9 @@ If you need to view an example, see: https://bitbucket.org/MatkatMusic/pfmcpptas
 #include <iostream>
 #include <cmath>
 #include <functional>
+#include <memory>
+#include <limits>
+
 
 template <typename T>
 struct TypeHolder
@@ -136,9 +136,27 @@ struct TypeHolder
     }
 
     TypeHolder& operator/=( Primitive rhs )
-    {
+    {   
+        if constexpr ( std::is_same<Primitive, int>::value )
+        {
+            if ( rhs == 0 )
+            {
+                std::cout << "Can't divide by 0.\n";
+                return *this;
+            }
+            else if ( rhs < std::numeric_limits<Primitive>epsilon() )
+            {
+                std::cout << "Can't divide by 0.\n";
+                return *this;
+            }
+        }
+        else if ( rhs < std::numeric_limits<Primitive>epsilon() )
+        {
+            std::cout << "Warning, dividing by 0.\n";
+        }
+
         *a /= rhs;
-        return*this;
+        return *this;
     } 
 
     private:
@@ -161,24 +179,6 @@ struct TypeHolder<double>
     TypeHolder( Primitive varA ) : a( new Primitive(varA) ) {}
 
     operator Primitive() const { return *a; }
-/* 
- TypeHolder& apply( std::function< TypeHolder&( Primitive& )> func )
-    {
-        if (func != nullptr )
-            return func( *a );
-
-        std::cout << "Warning, nullptr, can't apply.\n";
-        return *this;
-    }
-
-    using FuncPtr = void(*)( Primitive& );
-    TypeHolder& apply( FuncPtr func )
-    {
-        if ( func != nullptr )
-            func( *a );
-        return *this;
-    } */
-
 
     template<typename FuncPtr>
     TypeHolder& apply( FuncPtr func )
