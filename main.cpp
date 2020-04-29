@@ -183,8 +183,7 @@ struct TypeHolder<double>
     template<typename FuncPtr>
     TypeHolder& apply( FuncPtr func )
     {
-        if ( func != nullptr )
-            func( *a );
+        func( *a );
         return *this;
     }
 
@@ -382,7 +381,7 @@ int main()
 
     std::cout << "dtA is currently: " << static_cast<double>(dtA) << std::endl;
     
-    dtA.apply( [&dtA]( std::unique_ptr<DoubleType::Primitive>& a ) -> DoubleType&
+    dtA.apply( [&dtA]( double &a ) -> DoubleType&
     {
         a += a;
         return dtA;    
@@ -390,7 +389,7 @@ int main()
     
     std::cout << "dtA applied to itself by lambda is: " << static_cast<double>(dtA) << std::endl;
 
-    dtA.apply( updateValue );
+    dtA.apply( updateValue<double> );
 
     std::cout << "dtA applied to itself via function pointer is: " << static_cast<double>(dtA) << std::endl;
 
