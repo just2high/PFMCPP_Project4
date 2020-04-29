@@ -144,13 +144,13 @@ struct TypeHolder
                 std::cout << "Can't divide by 0.\n";
                 return *this;
             }
-            else if ( rhs < std::numeric_limits<Primitive>epsilon() )
+            else if ( rhs < std::numeric_limits<Primitive>::epsilon() )
             {
                 std::cout << "Can't divide by 0.\n";
                 return *this;
             }
         }
-        else if ( rhs < std::numeric_limits<Primitive>epsilon() )
+        else if ( rhs < std::numeric_limits<Primitive>::epsilon() )
         {
             std::cout << "Warning, dividing by 0.\n";
         }
