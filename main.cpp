@@ -88,15 +88,15 @@ If you need to view an example, see: https://bitbucket.org/MatkatMusic/pfmcpptas
 
 
 template <typename T>
-struct TypeHolder
+struct Numeric
 {
     using Primitive = T;
 
-    TypeHolder( Primitive varA ) : a( new Primitive(varA) ) {}
+    Numeric( Primitive varA ) : a( new Primitive(varA) ) {}
 
     operator Primitive() const { return *a; }
 
-    TypeHolder& apply( std::function< TypeHolder&( Primitive& )> func )
+    Numeric& apply( std::function< Numeric&( Primitive& )> func )
     {
         if (func != nullptr )
             return func( *a );
@@ -106,37 +106,37 @@ struct TypeHolder
     }
 
     using FuncPtr = void(*)( Primitive& );
-    TypeHolder& apply( FuncPtr func )
+    Numeric& apply( FuncPtr func )
     {
         if ( func != nullptr )
             func( *a );
         return *this;
     }
 
-    TypeHolder& pow( Primitive rhs )
+    Numeric& pow( Primitive rhs )
     {
         return powInternal ( rhs );
     }
 
-    TypeHolder& operator+=( Primitive rhs )
+    Numeric& operator+=( Primitive rhs )
     {
         *a += rhs;
         return *this;
     }
 
-    TypeHolder& operator-=( Primitive rhs )
+    Numeric& operator-=( Primitive rhs )
     {
         *a -= rhs;
         return *this;
     }
 
-    TypeHolder& operator*=( Primitive rhs )
+    Numeric& operator*=( Primitive rhs )
     {
         *a *= rhs;
         return *this;
     }
 
-    TypeHolder& operator/=( Primitive rhs )
+    Numeric& operator/=( Primitive rhs )
     {   
         if constexpr ( std::is_same<Primitive, int>::value )
         {
@@ -166,7 +166,7 @@ struct TypeHolder
 private:
     std::unique_ptr<Primitive> a;
 
-    TypeHolder& powInternal( const Primitive value )
+    Numeric& powInternal( const Primitive value )
     {
         if( a != nullptr )
             *a = static_cast<Primitive>( std::pow( *a, value ) ); // to avoid warning when converting into <int> type
@@ -176,45 +176,45 @@ private:
 
 // DoubleType Templated Def
 template <>
-struct TypeHolder<double>
+struct Numeric<double>
 {
     using Primitive = double;
 
-    TypeHolder( Primitive varA ) : a( new Primitive(varA) ) {}
+    Numeric( Primitive varA ) : a( new Primitive(varA) ) {}
 
     operator Primitive() const { return *a; }
 
     template<typename FuncPtr>
-    TypeHolder& apply( FuncPtr func )
+    Numeric& apply( FuncPtr func )
     {
         func( *a );
         return *this;
     }
 
-    TypeHolder& pow( Primitive rhs )
+    Numeric& pow( Primitive rhs )
     {
         return powInternal ( rhs );
     }
 
-    TypeHolder& operator+=( Primitive rhs )
+    Numeric& operator+=( Primitive rhs )
     {
         *a += rhs;
         return *this;
     }
 
-    TypeHolder& operator -=( Primitive rhs )
+    Numeric& operator -=( Primitive rhs )
     {
         *a -= rhs;
         return *this;
     }
 
-    TypeHolder& operator *=( Primitive rhs )
+    Numeric& operator *=( Primitive rhs )
     {
         *a *= rhs;
         return *this;
     }
 
-    TypeHolder& operator/=( Primitive rhs )
+    Numeric& operator/=( Primitive rhs )
     {
         *a /= rhs;
         return*this;
@@ -223,7 +223,7 @@ struct TypeHolder<double>
     private:
     std::unique_ptr<Primitive> a;
 
-    TypeHolder& powInternal( const Primitive value )
+    Numeric& powInternal( const Primitive value )
     {
         if( a != nullptr )
             *a = std::pow( *a, value );
@@ -273,9 +273,9 @@ int main()
 { 
     divider();
 
-    TypeHolder<float> ft(3.2f);
-    TypeHolder<double> dt(8.473276);
-    TypeHolder<int> it(19);
+    Numeric<float> ft(3.2f);
+    Numeric<double> dt(8.473276);
+    Numeric<int> it(19);
 
     std::cout << "The starting value of FloatType 'ft' is: " << static_cast<float>(ft) << std::endl;
     std::cout << "The starting value of DoubleType 'dt' is: " << static_cast<double>(dt) << std::endl;
@@ -343,7 +343,7 @@ int main()
 
     pt.toString();
 
-    TypeHolder<double> dtp( 5.67893 );
+    Numeric<double> dtp( 5.67893 );
     Point pdt( static_cast<float>(dtp), static_cast<float>(dtp) );
 
     divider();
@@ -361,7 +361,7 @@ int main()
 
     std::cout << "The apply() function applies the current value of the current object to itself.\n\n";
 
-    TypeHolder<float> ftA(4.5f);
+    Numeric<float> ftA(4.5f);
     using FloatType = decltype(ftA);
 
     std::cout << "FtA is currently: " << static_cast<float>(ftA) << std::endl;
@@ -380,7 +380,7 @@ int main()
 
     divider();
 
-    TypeHolder<double> dtA(7.894561);
+    Numeric<double> dtA(7.894561);
     using DoubleType = decltype(dtA);
 
     std::cout << "dtA is currently: " << static_cast<double>(dtA) << std::endl;
@@ -399,7 +399,7 @@ int main()
 
     divider();
 
-    TypeHolder<int> itA(495);
+    Numeric<int> itA(495);
     using IntType = decltype(itA);
 
     std::cout << "itA is currently: " << static_cast<int>(itA) << std::endl;
