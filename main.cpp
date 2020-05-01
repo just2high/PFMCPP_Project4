@@ -84,6 +84,7 @@ If you need to view an example, see: https://bitbucket.org/MatkatMusic/pfmcpptas
 #include <functional>
 #include <memory>
 #include <limits>
+#include <typeinfo>
 
 
 template <typename T>
@@ -139,15 +140,18 @@ struct TypeHolder
     {   
         if constexpr ( std::is_same<Primitive, int>::value )
         {
-            if ( rhs == 0 )
-            {
-                std::cout << "Can't divide by 0.\n";
-                return *this;
-            }
-            else if ( rhs < std::numeric_limits<Primitive>::epsilon() )
-            {
-                std::cout << "Can't divide by 0.\n";
-                return *this;
+            if( typeid(rhs) == typeid(int) )
+            { 
+                if ( rhs == 0 )
+                {
+                    std::cout << "Can't divide by 0.\n";
+                    return *this;
+                }
+                else if ( rhs < std::numeric_limits<Primitive>::epsilon() )
+                {
+                    std::cout << "Can't divide by 0.\n";
+                    return *this;
+                }
             }
         }
         else if ( rhs < std::numeric_limits<Primitive>::epsilon() )
