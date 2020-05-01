@@ -123,13 +123,13 @@ struct TypeHolder
         return *this;
     }
 
-    TypeHolder& operator -=( Primitive rhs )
+    TypeHolder& operator-=( Primitive rhs )
     {
         *a -= rhs;
         return *this;
     }
 
-    TypeHolder& operator *=( Primitive rhs )
+    TypeHolder& operator*=( Primitive rhs )
     {
         *a *= rhs;
         return *this;
@@ -159,7 +159,7 @@ struct TypeHolder
         return *this;
     } 
 
-    private:
+private:
     std::unique_ptr<Primitive> a;
 
     TypeHolder& powInternal( const Primitive value )
