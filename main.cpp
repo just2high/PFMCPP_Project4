@@ -140,7 +140,7 @@ struct Numeric
     {   
         if constexpr ( std::is_same<Primitive, int>::value )
         {
-            if( typeid(rhs) == typeid(int) )
+            if constexpr ( std::is_same< decltype(rhs), int>::value )
             { 
                 if ( rhs == 0 )
                 {
