@@ -96,10 +96,10 @@ struct Numeric
 
     operator Primitive() const { return *a; }
 
-    Numeric& apply( std::function< Numeric&( Primitive& )> func )
+    Numeric& apply( std::function< Numeric&( std::unique_ptr<Primitive>& ) > func )
     {
-        if (func != nullptr )
-            return func( *a );
+        if ( func != nullptr )
+            return func( a );
 
         std::cout << "Warning, nullptr, can't apply.\n";
         return *this;
@@ -366,9 +366,9 @@ int main()
 
     std::cout << "FtA is currently: " << static_cast<float>(ftA) << std::endl;
     
-    ftA.apply( [&ftA]( float &a ) -> FloatType&
+    ftA.apply( [&ftA]( std::unique_ptr<FloatType::Primitive> &a ) -> FloatType&
     {
-        a += a;
+        *a += *a;
         return ftA;    
     } );
     
@@ -404,9 +404,9 @@ int main()
 
     std::cout << "itA is currently: " << static_cast<int>(itA) << std::endl;
     
-    itA.apply( [&itA]( int &a ) -> IntType&
+    itA.apply( [&itA]( std::unique_ptr<IntType::Primitive> &a ) -> IntType&
     {
-        a += a;
+        *a += *a;
         return itA;    
     } );
     
