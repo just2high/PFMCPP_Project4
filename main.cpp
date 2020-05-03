@@ -1,5 +1,3 @@
-
-#include <iostream>
 /*
 Project 4: Part 7 / 9
 Video: Chapter 5 Part 4
@@ -81,25 +79,161 @@ send me a DM to check your pull request
 If you need to view an example, see: https://bitbucket.org/MatkatMusic/pfmcpptasks/src/master/Projects/Project4/Part7Example.cpp
 */
 
-
-
-
-
-
 #include <iostream>
 #include <cmath>
 #include <functional>
+#include <memory>
+#include <limits>
+#include <typeinfo>
 
-struct DoubleType;
-struct IntType;
-struct FloatType;
+
+template <typename T>
+struct Numeric
+{
+    using Primitive = T;
+
+    Numeric( Primitive varA ) : a( new Primitive(varA) ) {}
+
+    operator Primitive() const { return *a; }
+
+    Numeric& apply( std::function< Numeric&( std::unique_ptr<Primitive>& ) > func )
+    {
+        if ( func != nullptr )
+            return func( a );
+
+        std::cout << "Warning, nullptr, can't apply.\n";
+        return *this;
+    }
+
+    using FuncPtr = void(*)( Primitive& );
+    Numeric& apply( FuncPtr func )
+    {
+        if ( func != nullptr )
+            func( *a );
+        return *this;
+    }
+
+    Numeric& pow( Primitive rhs )
+    {
+        return powInternal ( rhs );
+    }
+
+    Numeric& operator+=( Primitive rhs )
+    {
+        *a += rhs;
+        return *this;
+    }
+
+    Numeric& operator-=( Primitive rhs )
+    {
+        *a -= rhs;
+        return *this;
+    }
+
+    Numeric& operator*=( Primitive rhs )
+    {
+        *a *= rhs;
+        return *this;
+    }
+
+    Numeric& operator/=( Primitive rhs )
+    {   
+        if constexpr ( std::is_same<Primitive, int>::value )
+        {
+            if constexpr ( std::is_same< decltype(rhs), int>::value )
+            { 
+                if ( rhs == 0 )
+                {
+                    std::cout << "Can't divide by 0.\n";
+                    return *this;
+                }
+                else if ( rhs < std::numeric_limits<Primitive>::epsilon() )
+                {
+                    std::cout << "Can't divide by 0.\n";
+                    return *this;
+                }
+            }
+        }
+        else if ( rhs < std::numeric_limits<Primitive>::epsilon() )
+        {
+            std::cout << "Warning, dividing by 0.\n";
+        }
+
+        *a /= rhs;
+        return *this;
+    } 
+
+private:
+    std::unique_ptr<Primitive> a;
+
+    Numeric& powInternal( const Primitive value )
+    {
+        if( a != nullptr )
+            *a = static_cast<Primitive>( std::pow( *a, value ) ); // to avoid warning when converting into <int> type
+        return *this;
+    }
+};
+
+// DoubleType Templated Def
+template <>
+struct Numeric<double>
+{
+    using Primitive = double;
+
+    Numeric( Primitive varA ) : a( new Primitive(varA) ) {}
+
+    operator Primitive() const { return *a; }
+
+    template<typename FuncPtr>
+    Numeric& apply( FuncPtr func )
+    {
+        func( *a );
+        return *this;
+    }
+
+    Numeric& pow( Primitive rhs )
+    {
+        return powInternal ( rhs );
+    }
+
+    Numeric& operator+=( Primitive rhs )
+    {
+        *a += rhs;
+        return *this;
+    }
+
+    Numeric& operator -=( Primitive rhs )
+    {
+        *a -= rhs;
+        return *this;
+    }
+
+    Numeric& operator *=( Primitive rhs )
+    {
+        *a *= rhs;
+        return *this;
+    }
+
+    Numeric& operator/=( Primitive rhs )
+    {
+        *a /= rhs;
+        return*this;
+    } 
+
+    private:
+    std::unique_ptr<Primitive> a;
+
+    Numeric& powInternal( const Primitive value )
+    {
+        if( a != nullptr )
+            *a = std::pow( *a, value );
+        return *this;
+    }
+};
 
 struct Point
 {
     Point( float a, float b ) : x( a ), y( b ) {}
-    Point( const FloatType& ft );
-    Point( const DoubleType& dt );
-    Point( const IntType& it );
 
     Point& multiply(float m)
     {
@@ -107,9 +241,6 @@ struct Point
         y *= m;
         return *this;
     }
-    Point& multiply( const FloatType& ft );
-    Point& multiply( const DoubleType& dt );
-    Point& multiply( const IntType& it );
 
     Point& operator*=( float m )
     {
@@ -125,430 +256,10 @@ private:
     float x{0}, y{0};
 };
 
-struct FloatType
-{
-    FloatType( float varA ) : a( new float(varA) ) {}
-    ~FloatType()
-    {
-        delete a;
-        a = nullptr;
-    }
-
-    operator float() const { return *a; }
-
-    FloatType& apply( std::function< FloatType&( float& )> func )
-    {
-        if (func != nullptr )
-            return func( *a );
-
-        std::cout << "Warning, nullptr, can't apply.\n";
-        return *this;
-    }
-
-    using FuncPtr = void(*)( float& );
-    FloatType& apply( FuncPtr func )
-    {
-        if ( func != nullptr )
-            func( *a );
-        return *this;
-    }
-
-    FloatType& add( float rhs );
-    FloatType& subtract( float rhs );
-    FloatType& multiply( float rhs );
-    FloatType& divide( float rhs );
-
-    FloatType& pow( float rhs );
-    FloatType& pow( const FloatType& rhs );
-    FloatType& pow( const DoubleType& rhs );
-    FloatType& pow( const IntType& rhs );
-
-    FloatType& operator+=( float rhs )
-    {
-        *a += rhs;
-        return *this;
-    }
-
-    FloatType& operator -=( float rhs )
-    {
-        *a -= rhs;
-        return *this;
-    }
-
-    FloatType& operator *=( float rhs )
-    {
-        *a *= rhs;
-        return *this;
-    }
-
-    FloatType& operator/=( float rhs )
-    {
-        *a /= rhs;
-        return*this;
-    } 
-
-    private:
-    float* a;
-
-    FloatType& powInternal( const float value );
-};
-
-FloatType& FloatType::add( float rhs )
-{
-    *a += rhs;
-    return *this;
-}
-
-FloatType& FloatType::subtract( float rhs )
-{
-    *a -= rhs;
-    return *this;
-}
-
-FloatType& FloatType::multiply( float rhs )
-{
-    *a *= rhs;
-    return *this;
-}
-
-FloatType& FloatType::divide( float rhs )
-{
-    if( rhs == 0.f )
-    {
-        std::cout << "warning, trying to divide by 0\n";
-    }
-    *a /= rhs;
-    return *this;
-}
-
-struct DoubleType
-{
-    DoubleType ( double varA ) : a( new double(varA) ) {}
-    ~DoubleType()
-    {
-        delete a;
-        a = nullptr;
-    }
-
-    operator double() const { return *a; }
-
-    DoubleType& apply( std::function<DoubleType&( double& )> func )
-    {
-        if (func != nullptr )
-            return func( *a );
-
-        std::cout << "Warning, nullptr, can't apply.\n";
-        return *this;
-    }
-
-    using FuncPtr = void(*)( double& );
-    DoubleType& apply ( FuncPtr func )
-    {
-        if ( func != nullptr )
-            func( *a );
-        return *this;
-    }
-
-    DoubleType& add( double rhs );
-    DoubleType& subtract( double rhs );
-    DoubleType& multiply( double rhs );
-    DoubleType& divide( double rhs );
-
-    DoubleType& pow( double rhs );
-    DoubleType& pow( const FloatType& rhs );
-    DoubleType& pow( const DoubleType& rhs );
-    DoubleType& pow( const IntType& rhs );
-
-    DoubleType& operator+=( double rhs )
-    {
-        *a += rhs;
-        return *this;
-    }
-
-    DoubleType& operator -=( double rhs )
-    {
-        *a -= rhs;
-        return *this;
-    }
-
-    DoubleType& operator *=( double rhs )
-    {
-        *a *= rhs;
-        return *this;
-    }
-
-    DoubleType& operator/=( double rhs )
-    {
-        *a /= rhs;
-        return*this;
-    } 
-
-
-    private:
-    double* a;
-
-    DoubleType& powInternal( const double value );
-};
-
-DoubleType& DoubleType:: add( double rhs )
-{
-    *a += rhs;
-    return *this;
-}
-
-DoubleType& DoubleType::subtract( double rhs )
-{
-    *a -= rhs;
-    return *this;
-}
-
-DoubleType& DoubleType::multiply( double rhs )
-{
-    *a *= rhs;
-    return *this;
-}
-
-DoubleType& DoubleType::divide( double rhs )
-{
-    if( static_cast<int>(rhs) == 0 )
-    {
-        std::cout << "warning, trying to divide by 0\n";
-    }
-    *a /= rhs;
-    
-    return *this;
-}
-
-struct IntType
-{
-    IntType( int varA ) : a( new int(varA) ) {}
-    ~IntType()
-    {
-        delete a;
-        a = nullptr;
-    }
-
-    operator int() const { return *a; }
-
-    IntType& apply( std::function<IntType&( int& )> func )
-    {
-        if (func != nullptr )
-            return func( *a );
-
-        std::cout << "Warning, nullptr, can't apply.\n";
-        return *this;
-    }
-
-    using FuncPtr = void(*)( int& );
-    IntType& apply ( FuncPtr func )
-    {
-        if ( func != nullptr )
-            func( *a );
-        return *this;
-    }
-
-    IntType& add( int rhs );
-    IntType& subtract( int rhs );
-    IntType& multiply( int rhs );
-    IntType& divide( int rhs );
-
-    IntType& pow( int rhs );
-    IntType& pow( const FloatType& rhs );
-    IntType& pow( const DoubleType& rhs );
-    IntType& pow( const IntType& rhs );
-
-    IntType& operator+=( int rhs )
-    {
-        *a += rhs;
-        return *this;
-    }
-
-    IntType& operator -=( int rhs )
-    {
-        *a -= rhs;
-        return *this;
-    }
-
-    IntType& operator *=( int rhs )
-    {
-        *a *= rhs;
-        return *this;
-    }
-
-    IntType& operator/=( int rhs )
-    {
-        if( rhs == 0 )
-        {
-            std::cout << "warning, trying to divide by 0\n";
-            std::cout << "Current value of IntType: ";
-            return *this;
-        }
-        *a /= rhs;
-        return*this;
-    } 
-
-    private:
-    int* a;
-    
-    IntType& powInternal( const int value );
-};
-
-IntType& IntType::add( int rhs )
-{
-    *a += rhs;
-    return *this;
-}
-
-IntType& IntType::subtract( int rhs )
-{
-    *a -= rhs;
-    return *this;
-}
-
-IntType& IntType::multiply( int rhs )
-{
-    *a *= rhs;
-    return *this;
-}
-
-IntType& IntType::divide( int rhs )
-{
-    if( rhs == 0 )
-    {
-        std::cout << "warning, trying to divide by 0\n";
-        std::cout << "Current value of IntType: ";
-        return *this;
-    }
-    *a /= rhs;
-    return *this;
-}
-
-/* Power Function Definitions */
-
-FloatType& FloatType::powInternal( const float value )
-{
-    if ( a != nullptr )
-        *a = std::pow( *a, value );
-
-    return *this;
-}
-
-FloatType& FloatType::pow( float rhs )
-{
-    return powInternal( rhs );
-}
-
-FloatType& FloatType::pow( const FloatType& rhs )
-{
-    return powInternal( static_cast<float>(rhs) );
-}
-
-FloatType& FloatType::pow( const DoubleType& rhs )
-{
-    return powInternal( static_cast<float>(rhs) );
-}
-
-FloatType& FloatType::pow( const IntType& rhs )
-{
-    return powInternal( static_cast<float>(rhs) );
-}
-
-//===========================================//
-
-DoubleType& DoubleType::powInternal( const double value )
-{
-    if ( a != nullptr )
-        *a = std::pow( *a, value );
-
-    return *this;
-}
-
-DoubleType& DoubleType::pow( double rhs )
-{
-    return powInternal( rhs );
-}
-
-DoubleType& DoubleType::pow( const FloatType& rhs )
-{
-    return powInternal( static_cast<double>(rhs) );
-}
-
-DoubleType& DoubleType::pow( const DoubleType& rhs )
-{
-    return powInternal( static_cast<double>(rhs) );
-}
-
-DoubleType& DoubleType::pow( const IntType& rhs )
-{
-    return powInternal( static_cast<double>(rhs) );
-}
-
-//===========================================//
-
-IntType& IntType::powInternal( const int value )
-{
-    if ( a != nullptr )
-        *a = static_cast<int>( std::pow( *a, value ) );
-
-    return *this;
-}
-
-IntType& IntType::pow( int rhs )
-{
-    return powInternal( rhs );
-}
-
-IntType& IntType::pow( const FloatType& rhs )
-{
-    return powInternal( static_cast<int>(rhs) );
-}
-
-IntType& IntType::pow( const DoubleType& rhs )
-{
-    return powInternal( static_cast<int>(rhs) );
-}
-
-IntType& IntType::pow( const IntType& rhs )
-{
-    return powInternal( static_cast<int>(rhs) );
-}
-
-/* Point UDT Implementation */
-
-Point::Point( const FloatType& ft ) : Point( ft, ft) {}
-
-Point::Point( const DoubleType& dt ) : Point ( static_cast<float>(dt), static_cast<float>(dt) ) {}
-
-Point::Point( const IntType& it ) : Point ( static_cast<int>(it), static_cast<int>(it) ) {}
-
-Point& Point::multiply( const FloatType& ft )
-{
-    return multiply( static_cast<float>(ft) );
-}
-
-Point& Point::multiply( const DoubleType& dt )
-{
-    return multiply( static_cast<float>(dt) );
-}
-
-Point& Point::multiply( const IntType& it )
-{
-    return multiply( static_cast<float>(it) );
-}
-
 /*         Free Functions               */
 
-void updateValue( float& value)
-{
-    value += value;
-}
-
-void updateValue( double& value)
-{
-    value += value;
-}
-
-void updateValue( int& value)
+template <typename T>
+void updateValue( T& value)
 {
     value += value;
 }
@@ -562,9 +273,9 @@ int main()
 { 
     divider();
 
-    FloatType ft(3.2f);
-    DoubleType dt(8.473276);
-    IntType it(19);
+    Numeric<float> ft(3.2f);
+    Numeric<double> dt(8.473276);
+    Numeric<int> it(19);
 
     std::cout << "The starting value of FloatType 'ft' is: " << static_cast<float>(ft) << std::endl;
     std::cout << "The starting value of DoubleType 'dt' is: " << static_cast<double>(dt) << std::endl;
@@ -622,25 +333,25 @@ int main()
     pt *= static_cast<float>(ft);
 
     std::cout << "pt multiplied by ft is:\n";
-    // pt.multiply(ft);
+
     pt.toString();
 
     pt *= static_cast<float>(it);
 
 
     std::cout << "then pt multiplied by it is:\n";
-    // pt.multiply(it);
+
     pt.toString();
 
-    DoubleType dtp( 5.67893 );
-    Point pdt( dtp );
+    Numeric<double> dtp( 5.67893 );
+    Point pdt( static_cast<float>(dtp), static_cast<float>(dtp) );
 
     divider();
 
     std::cout << "pdt initialized with a DoubleType has these points:\n";
     pdt.toString();
     std::cout << "And then multiplied by the initializing DoubleType moves the point:\n";
-    // pdt.multiply(dtp);
+
 
     pdt *= static_cast<float>(dtp);
 
@@ -650,13 +361,14 @@ int main()
 
     std::cout << "The apply() function applies the current value of the current object to itself.\n\n";
 
-    FloatType ftA(4.5f);
+    Numeric<float> ftA(4.5f);
+    using FloatType = decltype(ftA);
 
     std::cout << "FtA is currently: " << static_cast<float>(ftA) << std::endl;
     
-    ftA.apply( [&ftA]( float &a ) -> FloatType&
+    ftA.apply( [&ftA]( std::unique_ptr<FloatType::Primitive> &a ) -> FloatType&
     {
-        a += a;
+        *a += *a;
         return ftA;    
     } );
     
@@ -668,7 +380,8 @@ int main()
 
     divider();
 
-    DoubleType dtA(7.894561);
+    Numeric<double> dtA(7.894561);
+    using DoubleType = decltype(dtA);
 
     std::cout << "dtA is currently: " << static_cast<double>(dtA) << std::endl;
     
@@ -680,19 +393,20 @@ int main()
     
     std::cout << "dtA applied to itself by lambda is: " << static_cast<double>(dtA) << std::endl;
 
-    dtA.apply( updateValue );
+    dtA.apply( updateValue<double> );
 
     std::cout << "dtA applied to itself via function pointer is: " << static_cast<double>(dtA) << std::endl;
 
     divider();
 
-    IntType itA(495);
+    Numeric<int> itA(495);
+    using IntType = decltype(itA);
 
     std::cout << "itA is currently: " << static_cast<int>(itA) << std::endl;
     
-    itA.apply( [&itA]( int &a ) -> IntType&
+    itA.apply( [&itA]( std::unique_ptr<IntType::Primitive> &a ) -> IntType&
     {
-        a += a;
+        *a += *a;
         return itA;    
     } );
     
