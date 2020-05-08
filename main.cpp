@@ -411,7 +411,7 @@ int main()
         std::cout << "i cubed: " << i << std::endl;
     }
 }
-
+/*
 int main()
 { 
     divider();
@@ -563,3 +563,4 @@ int main()
 
     std::cout << "good to go!" << std::endl;
 }
+*/
