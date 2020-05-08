@@ -69,12 +69,12 @@ struct Numeric
     //snip
 };
 }
-
+// COMPLETE
 /*
  4) remove your specialized <double> template of your Numeric<T> class from the previous task (ch5 p04)
     replace the 2 apply() functions in your Numeric<T> with the single templated apply() function from the specialized <double> template.
  */
-
+// COMPLETE
 /*
  5) Template your pow() function the same way you templated the overloaded math operators
     Remove the call to powInternal() and just call std::pow() directly.
@@ -143,26 +143,18 @@ struct Numeric
 
     operator Primitive() const { return *a; }
 
-    Numeric& apply( std::function< Numeric&( std::unique_ptr<Primitive>& ) > func )
-    {
-        if ( func != nullptr )
-            return func( a );
-
-        std::cout << "Warning, nullptr, can't apply.\n";
-        return *this;
-    }
-
-    using FuncPtr = void(*)( Primitive& );
+    template<typename FuncPtr>
     Numeric& apply( FuncPtr func )
     {
-        if ( func != nullptr )
-            func( *a );
+        func( *a );
         return *this;
     }
 
     Numeric& pow( Primitive rhs )
     {
-        return powInternal ( rhs );
+        if( a != nullptr )
+            *a = static_cast<Primitive>( std::pow( *a, value ) ); // to avoid warning when converting into <int> type
+        return *this;
     }
 
     Numeric& operator+=( Primitive rhs )
@@ -212,70 +204,6 @@ struct Numeric
 
 private:
     std::unique_ptr<Primitive> a;
-
-    Numeric& powInternal( const Primitive value )
-    {
-        if( a != nullptr )
-            *a = static_cast<Primitive>( std::pow( *a, value ) ); // to avoid warning when converting into <int> type
-        return *this;
-    }
-};
-
-// DoubleType Templated Def
-template <>
-struct Numeric<double>
-{
-    using Primitive = double;
-
-    Numeric( Primitive varA ) : a( new Primitive(varA) ) {}
-
-    operator Primitive() const { return *a; }
-
-    template<typename FuncPtr>
-    Numeric& apply( FuncPtr func )
-    {
-        func( *a );
-        return *this;
-    }
-
-    Numeric& pow( Primitive rhs )
-    {
-        return powInternal ( rhs );
-    }
-
-    Numeric& operator+=( Primitive rhs )
-    {
-        *a += rhs;
-        return *this;
-    }
-
-    Numeric& operator -=( Primitive rhs )
-    {
-        *a -= rhs;
-        return *this;
-    }
-
-    Numeric& operator *=( Primitive rhs )
-    {
-        *a *= rhs;
-        return *this;
-    }
-
-    Numeric& operator/=( Primitive rhs )
-    {
-        *a /= rhs;
-        return*this;
-    } 
-
-    private:
-    std::unique_ptr<Primitive> a;
-
-    Numeric& powInternal( const Primitive value )
-    {
-        if( a != nullptr )
-            *a = std::pow( *a, value );
-        return *this;
-    }
 };
 
 struct Point
