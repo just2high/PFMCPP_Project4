@@ -140,7 +140,7 @@ Use a service like https://www.diffchecker.com/diff to compare your output.
 template <typename T>
 struct Numeric
 {
-    using Primitive = T;
+    using Primitive = Temporary<T>;
 
     Numeric( Primitive varA ) : a( new Primitive(varA) ) {}
 
