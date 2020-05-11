@@ -25,6 +25,11 @@ Create a branch named Part8
  1) Here is a starting point for how to implement your Temporary struct.
  */
 
+#include <iostream>
+#include <cmath>
+#include <functional>
+#include <memory>
+#include <limits>
 #include <typeinfo>
 template<typename NumericType>
 struct Temporary
@@ -38,7 +43,7 @@ struct Temporary
      revise these conversion functions to read/write to 'v' here
      hint: what qualifier do read-only functions usually have?
      */
-    const operator NumericType() { /* read-only function */ return v; }
+    operator NumericType() const { /* read-only function */ return v; }
     operator NumericType&() { /* read/write function */ return v; }
 private:
     static int counter;
@@ -51,27 +56,13 @@ private:
 */
 
 template<typename NumericType>
-int Temporary::<NumericType>::counter = 0;
+int Temporary<NumericType>::counter = 0;
 
 /*
  3) You'll need to template your overloaded math operator functions in your Templated Class from Ch5 p04
     use static_cast to convert whatever type is passed in to your template's NumericType before performing the +=, -=, etc.  here's an example implementation:
  */
-namespace example
-{
-template<typename NumericType>
-struct Numeric
-{
-    //snip
-    template<typename OtherType>
-    Numeric& operator-=(const OtherType& o) 
-    { 
-        *value -= static_cast<NumericType>(o); 
-        return *this; 
-    }
-    //snip
-};
-}
+
 // COMPLETE
 /*
  4) remove your specialized <double> template of your Numeric<T> class from the previous task (ch5 p04)
@@ -128,14 +119,6 @@ i cubed: 531441
 
 Use a service like https://www.diffchecker.com/diff to compare your output. 
 */
-
-#include <iostream>
-#include <cmath>
-#include <functional>
-#include <memory>
-#include <limits>
-#include <typeinfo>
-
 
 template <typename T>
 struct Numeric
@@ -278,7 +261,7 @@ int main()
     f *= d;
     f /= 2.f;
     std::cout << "f: " << f << std::endl;
-    
+    /* 
     d += 2.f;
     d -= i;
     d *= f;
@@ -345,158 +328,5 @@ int main()
         
         i.apply( cube<Type> );
         std::cout << "i cubed: " << i << std::endl;
-    }
+    }  */
 }
-/*
-int main()
-{ 
-    divider();
-
-    Numeric<float> ft(3.2f);
-    Numeric<double> dt(8.473276);
-    Numeric<int> it(19);
-
-    std::cout << "The starting value of FloatType 'ft' is: " << static_cast<float>(ft) << std::endl;
-    std::cout << "The starting value of DoubleType 'dt' is: " << static_cast<double>(dt) << std::endl;
-    std::cout << "The starting value of IntType 'it' is: " << static_cast<int>(it) << std::endl;
-
-    divider();
-
-    ft += 5.4f;
-    ft *= 6;
-
-    std::cout << "We can add (5.4) to 'ft' and multiply 'it' by (6) which equals: " << static_cast<float>(ft) << std::endl;
- 
-    dt /= 2.2;
-    dt += 0.86;
-
-    std::cout << "We can divde 'dt' by (2.2) and add (0.86) which equals: " << static_cast<double>(dt) << std::endl;
-
-    it -= 10;
-    it *= 12;
-    it /= static_cast<int>(ft);
-
-    std::cout << "We can subtract (10) from 'it' and multiply by (12) and divide by ft(" << static_cast<float>(ft) << ") which equals: " << static_cast<int>(it) << std::endl;
- 
-    divider();
-
-    std::cout << "We will find that we cannot divide 'it' by a number less than 1:\n"; 
-    std::cout << "it(" << static_cast<int>(it) << ") divided by 0.2 throws an error:\n";
-    std::cout << ( it /= static_cast<int>(0.2) ) << std::endl;
-
-    divider();
-
-    dt *= static_cast<double>(it);
-    dt += static_cast<double>(ft);
-
-    std::cout << "But we can use all types together.  The result of 'dt' times 'it' plus 'ft' is: " << static_cast<double>(dt) <<std::endl;
-
-    divider();
-
-    std::cout << "Ft is currently: " << static_cast<float>(ft) << std::endl;
-    std::cout << "ft pow of 3: " << ft.pow( 3 ) << std::endl;
-    std::cout << "it is currently: " << static_cast<int>(it) << std::endl;
-    std::cout << "it pow of 2: " << it.pow( 2 ) << std::endl;
-    std::cout << "dt is currently: " << static_cast<double>(dt) << std::endl;
-    std::cout << "dt pow of 1.2: " << dt.pow( 1.2 ) << std::endl;
-
-    std::cout << "Chaining makes ridiculous numbers: " << ft.pow(it).pow(3) << std::endl;
-
-    divider();
-
-    Point pt( 2.f, 3.f );
-
-    std::cout << "pt's initial points are:\n";
-    pt.toString();
-
-    pt *= static_cast<float>(ft);
-
-    std::cout << "pt multiplied by ft is:\n";
-
-    pt.toString();
-
-    pt *= static_cast<float>(it);
-
-
-    std::cout << "then pt multiplied by it is:\n";
-
-    pt.toString();
-
-    Numeric<double> dtp( 5.67893 );
-    Point pdt( static_cast<float>(dtp), static_cast<float>(dtp) );
-
-    divider();
-
-    std::cout << "pdt initialized with a DoubleType has these points:\n";
-    pdt.toString();
-    std::cout << "And then multiplied by the initializing DoubleType moves the point:\n";
-
-
-    pdt *= static_cast<float>(dtp);
-
-    pdt.toString();
-
-    divider();
-
-    std::cout << "The apply() function applies the current value of the current object to itself.\n\n";
-
-    Numeric<float> ftA(4.5f);
-    using FloatType = decltype(ftA);
-
-    std::cout << "FtA is currently: " << static_cast<float>(ftA) << std::endl;
-    
-    ftA.apply( [&ftA]( std::unique_ptr<FloatType::Primitive> &a ) -> FloatType&
-    {
-        *a += *a;
-        return ftA;    
-    } );
-    
-    std::cout << "FtA applied to itself by lambda is: " << static_cast<float>(ftA) << std::endl;
-
-    ftA.apply( updateValue );
-
-    std::cout << "FtA applied to itself via function pointer is: " << static_cast<float>(ftA) << std::endl;
-
-    divider();
-
-    Numeric<double> dtA(7.894561);
-    using DoubleType = decltype(dtA);
-
-    std::cout << "dtA is currently: " << static_cast<double>(dtA) << std::endl;
-    
-    dtA.apply( [&dtA]( double &a ) -> DoubleType&
-    {
-        a += a;
-        return dtA;    
-    } );
-    
-    std::cout << "dtA applied to itself by lambda is: " << static_cast<double>(dtA) << std::endl;
-
-    dtA.apply( updateValue<double> );
-
-    std::cout << "dtA applied to itself via function pointer is: " << static_cast<double>(dtA) << std::endl;
-
-    divider();
-
-    Numeric<int> itA(495);
-    using IntType = decltype(itA);
-
-    std::cout << "itA is currently: " << static_cast<int>(itA) << std::endl;
-    
-    itA.apply( [&itA]( std::unique_ptr<IntType::Primitive> &a ) -> IntType&
-    {
-        *a += *a;
-        return itA;    
-    } );
-    
-    std::cout << "itA applied to itself by lambda is: " << static_cast<int>(itA) << std::endl;
-
-    itA.apply( updateValue );
-
-    std::cout << "itA applied to itself via function pointer is: " << static_cast<int>(itA) << std::endl;
-
-    divider();
-
-    std::cout << "good to go!" << std::endl;
-}
-*/
