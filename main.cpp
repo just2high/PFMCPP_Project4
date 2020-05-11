@@ -142,28 +142,28 @@ struct Numeric
     Numeric& pow( const OtherType& rhs )
     {
         if( a != nullptr )
-            *a = static_cast<Primitive>( std::pow( *a, rhs ) );
+            *a = static_cast<T>( std::pow( *a, rhs ) );
         return *this;
     }
 
     template<typename OtherType>
     Numeric& operator+=( const OtherType& rhs )
     {
-        *a += static_cast<Primitive>(rhs);
+        *a += static_cast<T>(rhs);
         return *this;
     }
     
     template<typename OtherType>
     Numeric& operator-=( const OtherType& rhs )
     {
-        *a -= static_cast<Primitive>(rhs);
+        *a -= static_cast<T>(rhs);
         return *this;
     }
 
     template<typename OtherType>
     Numeric& operator*=( const OtherType& rhs )
     {
-        *a *= static_cast<Primitive>(rhs);
+        *a *= static_cast<T>(rhs);
         return *this;
     }
 
@@ -256,8 +256,7 @@ void divider()
 #include <iostream>
 int main()
 {
-    Temporary<float> f(0.1f);
-  /*  Numeric<float> f(0.1f);
+    Numeric<float> f(0.1f);
     Numeric<int> i(3);
     Numeric<double> d(4.2);
     
@@ -275,7 +274,7 @@ int main()
     
     i += 2.f; i -= f; i *= d; i /= 2.f;
     std::cout << "i: "<< i << std::endl;
-    
+     
     Point p(f, i);
     p.toString();
     
@@ -333,5 +332,5 @@ int main()
         
         i.apply( cube<Type> );
         std::cout << "i cubed: " << i << std::endl;
-    }  */
+    } 
 }
