@@ -142,8 +142,15 @@ struct Numeric
     Numeric& pow( const OtherType& rhs )
     {
         if( a != nullptr )
-            *a = static_cast<T>( std::pow( *a, rhs ) );
+            *a = std::pow( *a, static_cast<T>(rhs) );
         return *this;
+    }
+
+    template<typename OtherType>
+    Numeric& operator=( const OtherType& rhs )
+    {
+        *a = static_cast<T>(rhs);
+        return *this; 
     }
 
     template<typename OtherType>
@@ -293,8 +300,8 @@ int main()
     std::cout << "intNum: " << intNum << std::endl;
     
     {
-        using Type = decltype(f)::Type;
-        f.apply([&f](std::unique_ptr<Type>&value) -> decltype(f)&
+        using Primitive = decltype(f)::Primitive;
+        f.apply([&f](std::unique_ptr<Primitive>&value) -> decltype(f)&
                 {
                     auto& v = *value;
                     v = v * v;
@@ -302,13 +309,13 @@ int main()
                 });
         std::cout << "f squared: " << f << std::endl;
         
-        f.apply( cube<Type> );
+        f.apply( cube<Primitive> );
         std::cout << "f cubed: " << f << std::endl;
     }
     
     {
-        using Type = decltype(d)::Type;
-        d.apply([&d](std::unique_ptr<Type>&value) -> decltype(d)&
+        using Primitive = decltype(d)::Primitive;
+        d.apply([&d](std::unique_ptr<Primitive>&value) -> decltype(d)&
                 {
                     auto& v = *value;
                     v = v * v;
@@ -316,13 +323,13 @@ int main()
                 });
         std::cout << "d squared: " << d << std::endl;
         
-        d.apply( cube<Type> );
+        d.apply( cube<Primitive> );
         std::cout << "d cubed: " << d << std::endl;
     }
     
     {
-        using Type = decltype(i)::Type;
-        i.apply([&i](std::unique_ptr<Type>&value) -> decltype(i)&
+        using Primitive = decltype(i)::Primitive;
+        i.apply([&i](std::unique_ptr<Primitive>&value) -> decltype(i)&
                 {
                     auto& v = *value;
                     v = v * v;
@@ -330,7 +337,7 @@ int main()
                 });
         std::cout << "i squared: " << i << std::endl;
         
-        i.apply( cube<Type> );
+        i.apply( cube<Primitive> );
         std::cout << "i cubed: " << i << std::endl;
     } 
 }
