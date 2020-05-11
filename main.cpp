@@ -203,16 +203,18 @@ struct Point
 {
     Point( float a, float b ) : x( a ), y( b ) {}
 
-    Point& multiply(float m)
+    template<typename OtherType>
+    Point& multiply( const OtherType& m)
     {
-        x *= m;
-        y *= m;
+        x *= static_cast<float>(m);
+        y *= static_cast<float>(m);
         return *this;
     }
 
-    Point& operator*=( float m )
+    template<typename OtherType>
+    Point& operator*=( const OtherType& m )
     {
-        return multiply( m );
+        return multiply( static_cast<float>(m) );
     }
 
     void toString()
@@ -254,7 +256,8 @@ void divider()
 #include <iostream>
 int main()
 {
-    Numeric<float> f(0.1f);
+    Temporary<float> f(0.1f);
+  /*  Numeric<float> f(0.1f);
     Numeric<int> i(3);
     Numeric<double> d(4.2);
     
@@ -263,7 +266,7 @@ int main()
     f *= d;
     f /= 2.f;
     std::cout << "f: " << f << std::endl;
-    /* 
+    
     d += 2.f;
     d -= i;
     d *= f;
