@@ -125,9 +125,11 @@ struct Numeric
 {
     using Primitive = Temporary<T>;
 
-    Numeric( Primitive varA ) : a( new Primitive(varA) ) {}
+    Numeric( Primitive varA ) : a( std::make_unique<Primitive>(varA) ) {}
 
-    operator Primitive() const { return *a; }
+    operator T() const { return *a; }
+
+    operator T&() { return *a; }
 
     template<typename FuncPtr>
     Numeric& apply( FuncPtr func )
