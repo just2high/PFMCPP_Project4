@@ -172,26 +172,26 @@ struct Numeric
     {   
         if constexpr ( std::is_same<Primitive, int>::value )
         {
-            if constexpr ( std::is_same< decltype(rhs), int>::value )
+            if constexpr ( std::is_same< OtherType, int>::value )
             { 
                 if ( rhs == 0 )
                 {
                     std::cout << "Can't divide by 0.\n";
                     return *this;
                 }
-                else if ( rhs < std::numeric_limits<Primitive>::epsilon() )
+                else if ( rhs < std::numeric_limits<OtherType>::epsilon() )
                 {
                     std::cout << "Can't divide by 0.\n";
                     return *this;
                 }
             }
         }
-        else if ( rhs < std::numeric_limits<Primitive>::epsilon() )
+        else if ( rhs < std::numeric_limits<OtherType>::epsilon() )
         {
             std::cout << "Warning, dividing by 0.\n";
         }
 
-        *a /= static_cast<Primitive>(rhs);
+        *a /= static_cast<T>(rhs);
         return *this;
     } 
 
