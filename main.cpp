@@ -153,32 +153,37 @@ struct Numeric
         return *this;
     }
 
-    Numeric& pow( Primitive rhs )
+    template<typename OtherType>
+    Numeric& pow( const OtherType& rhs )
     {
         if( a != nullptr )
-            *a = static_cast<Primitive>( std::pow( *a, value ) ); // to avoid warning when converting into <int> type
+            *a = static_cast<Primitive>( std::pow( *a, rhs ) );
         return *this;
     }
 
-    Numeric& operator+=( Primitive rhs )
+    template<typename OtherType>
+    Numeric& operator+=( const OtherType& rhs )
     {
-        *a += rhs;
+        *a += static_cast<Primitive>(rhs);
         return *this;
     }
-
-    Numeric& operator-=( Primitive rhs )
+    
+    template<typename OtherType>
+    Numeric& operator-=( const OtherType& rhs )
     {
-        *a -= rhs;
+        *a -= static_cast<Primitive>(rhs);
         return *this;
     }
 
-    Numeric& operator*=( Primitive rhs )
+    template<typename OtherType>
+    Numeric& operator*=( const OtherType& rhs )
     {
-        *a *= rhs;
+        *a *= static_cast<Primitive>(rhs);
         return *this;
     }
 
-    Numeric& operator/=( Primitive rhs )
+    template<typename OtherType>
+    Numeric& operator/=( const OtherType& rhs )
     {   
         if constexpr ( std::is_same<Primitive, int>::value )
         {
@@ -201,7 +206,7 @@ struct Numeric
             std::cout << "Warning, dividing by 0.\n";
         }
 
-        *a /= rhs;
+        *a /= static_cast<Primitive>(rhs);
         return *this;
     } 
 
