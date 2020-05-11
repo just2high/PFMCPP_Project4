@@ -134,7 +134,7 @@ struct Numeric
     template<typename FuncPtr>
     Numeric& apply( FuncPtr func )
     {
-        func( *a );
+        func( a );
         return *this;
     }
 
@@ -305,9 +305,9 @@ int main()
     
     {
         using Type = decltype(f)::Primitive;
-        f.apply([&f](std::unique_ptr<Type>&value) -> Type&
+        f.apply([&f](std::unique_ptr<Type>&a) -> Type&
             {
-                auto& v = *value;
+                auto& v = *a;
                 v = v * v;
                 return f;
             });
@@ -319,9 +319,9 @@ int main()
     
     {
         using Type = decltype(d)::Primitive;
-        d.apply([&d](std::unique_ptr<Type>&value) -> Type&
+        d.apply([&d](std::unique_ptr<Type>&a) -> Type&
             {
-                auto& v = *value;
+                auto& v = *a;
                 v = v * v;
                 return d;
             });
@@ -333,9 +333,9 @@ int main()
     
     {
         using Type = decltype(i)::Primitive;
-        i.apply([&i](std::unique_ptr<Type>&value) -> Type&
+        i.apply([&i](std::unique_ptr<Type>&a) -> Type&
             {
-                auto& v = *value;
+                auto& v = *a;
                 v = v * v;
                 return i;
             });
