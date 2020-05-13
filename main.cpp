@@ -304,8 +304,8 @@ int main()
     std::cout << "intNum: " << intNum << std::endl;
     
     {
-        using Type = decltype(f)::Primitive;
-        f.apply([&f](std::unique_ptr<Type>&a) -> Type&
+        using Type = decltype(f);
+        f.apply([&f](std::unique_ptr<Type::Primitive>& a) -> Type&
             {
                 auto& v = *a;
                 v = v * v;
@@ -313,13 +313,13 @@ int main()
             });
         std::cout << "f squared: " << f << std::endl;
         
-        f.apply( cube<Type> );
+        f.apply( cube<Type::Primitive> );
         std::cout << "f cubed: " << f << std::endl;
     }
     
     {
-        using Type = decltype(d)::Primitive;
-        d.apply([&d](std::unique_ptr<Type>&a) -> Type&
+        using Type = decltype(d);
+        d.apply([&d](std::unique_ptr<Type::Primitive>& a) -> Type&
             {
                 auto& v = *a;
                 v = v * v;
@@ -327,13 +327,13 @@ int main()
             });
         std::cout << "d squared: " << d << std::endl;
         
-        d.apply( cube<Type> );
+        d.apply( cube<Type::Primitive> );
         std::cout << "d cubed: " << d << std::endl;
     }
     
     {
-        using Type = decltype(i)::Primitive;
-        i.apply([&i](std::unique_ptr<Type>&a) -> Type&
+        using Type = decltype(i);
+        i.apply([&i](std::unique_ptr<Type::Primitive>& a) -> Type&
             {
                 auto& v = *a;
                 v = v * v;
@@ -341,7 +341,7 @@ int main()
             });
         std::cout << "i squared: " << i << std::endl;
         
-        i.apply( cube<Type> );
+        i.apply( cube<Type::Primitive> );
         std::cout << "i cubed: " << i << std::endl;
     }
 }
