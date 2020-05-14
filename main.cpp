@@ -123,9 +123,9 @@ Use a service like https://www.diffchecker.com/diff to compare your output.
 template <typename T>
 struct Numeric
 {
-    using Primitive = Temporary<T>;
+    using Type = Temporary<T>;
 
-    Numeric( Primitive varA ) : a( std::make_unique<Primitive>(varA) ) {}
+    Numeric( Type varA ) : a( std::make_unique<Type>(varA) ) {}
 
     operator T() const { return *a; }
 
@@ -177,7 +177,7 @@ struct Numeric
     template<typename OtherType>
     Numeric& operator/=( const OtherType& rhs )
     {   
-        if constexpr ( std::is_same<Primitive, int>::value )
+        if constexpr ( std::is_same<Type, int>::value )
         {
             if constexpr ( std::is_same< OtherType, int>::value )
             { 
@@ -186,14 +186,14 @@ struct Numeric
                     std::cout << "Can't divide by 0.\n";
                     return *this;
                 }
-                else if ( static_cast<Primitive>(rhs) < std::numeric_limits<Primitive>::epsilon() )
+                else if ( static_cast<Type>(rhs) < std::numeric_limits<Type>::epsilon() )
                 {
                     std::cout << "Can't divide by 0.\n";
                     return *this;
                 }
             }
         }
-        else if ( static_cast<Primitive>(rhs) < std::numeric_limits<Primitive>::epsilon() )
+        else if ( static_cast<Type>(rhs) < std::numeric_limits<Type>::epsilon() )
         {
             std::cout << "Warning, dividing by 0.\n";
         }
@@ -203,7 +203,7 @@ struct Numeric
     } 
 
 private:
-    std::unique_ptr<Primitive> a;
+    std::unique_ptr<Type> a;
 };
 
 struct Point
