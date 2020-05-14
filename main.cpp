@@ -193,7 +193,7 @@ struct Numeric
                 }
             }
         }
-        else if ( static_cast<Type>(rhs) < std::numeric_limits<Type>::epsilon() )
+        else if ( static_cast<OtherType>(rhs) < std::numeric_limits<OtherType>::epsilon() )
         {
             std::cout << "Warning, dividing by 0.\n";
         }
@@ -275,7 +275,7 @@ int main()
     f += 2.f;
     f -= i;
     f *= d;
-    f /= 2.f;
+    f /= 2.f; 
     std::cout << "f: " << f << std::endl;
     
     d += 2.f;
@@ -344,5 +344,5 @@ int main()
         
         i.apply( cube<Type> );
         std::cout << "i cubed: " << i << std::endl;
-    }
+    } 
 }
