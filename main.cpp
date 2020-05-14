@@ -190,7 +190,7 @@ struct Numeric
                 {
                     std::cout << "Can't divide by 0.\n";
                     return *this;
-                }
+                } 
             }
         }
         else if ( static_cast<OtherType>(rhs) < std::numeric_limits<OtherType>::epsilon() )
