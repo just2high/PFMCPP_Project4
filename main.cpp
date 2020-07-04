@@ -32,13 +32,14 @@ Create a branch named Part9
  
  You should end up with the same program output as Part 8's task if you did it right.
  */
-
+#include "LeakedObjectDetector.h"
 #include <iostream>
 #include <cmath>
 #include <functional>
 #include <memory>
 #include <limits>
 #include <typeinfo>
+
 template<typename NumericType>
 struct Temporary
 {
@@ -57,6 +58,8 @@ private:
     static int counter;
     NumericType v;
 };
+
+JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary)
 
 template<typename NumericType>
 int Temporary<NumericType>::counter = 0;
@@ -182,6 +185,8 @@ struct Numeric
 private:
     std::unique_ptr<Type> a;
 };
+
+JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Numeric)
 
 struct Point
 {
