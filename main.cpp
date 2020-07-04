@@ -43,11 +43,26 @@ Create a branch named Part9
 template<typename NumericType>
 struct Temporary
 {
+    //constructor
     Temporary(NumericType t) : v(t)
     {
         std::cout << "I'm a Temporary<" << typeid(v).name() << "> object, #"
                   << counter++ << std::endl;
     }
+
+    //destructor
+    ~Temporary() = default;
+
+    //move constructor
+    Temporary(NumericType&& t) : v( std::move(t.v) ) {}
+
+    //move assignment
+    Temporary& operator=(Temporary&& t)
+    {
+        this->v = std::move(t.v);
+        return *this;
+    }
+
     /*
      revise these conversion functions to read/write to 'v' here
      hint: what qualifier do read-only functions usually have?
@@ -57,9 +72,10 @@ struct Temporary
 private:
     static int counter;
     NumericType v;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary)
 };
 
-JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary)
 
 template<typename NumericType>
 int Temporary<NumericType>::counter = 0;
@@ -105,8 +121,23 @@ struct Numeric
 {
     using Type = Temporary<T>;
 
+    //constructor
     Numeric( Type varA ) : a( std::make_unique<Type>(varA) ) {}
 
+    //destructor
+    ~Numeric() = default;
+
+    //move constructor
+    Numeric( Numeric&& n ) : a( std::move(n.a) ) {}
+
+    //move assignment
+    Numeric& operator=( Numeric&& n )
+    {
+        this->a = std::move(n.a);
+        return *this;
+    }
+
+    //copy operators
     operator T() const { return *a; }
 
     operator T&() { return *a; }
@@ -184,9 +215,9 @@ struct Numeric
 
 private:
     std::unique_ptr<Type> a;
-};
 
-JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Numeric)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Numeric)
+};
 
 struct Point
 {
