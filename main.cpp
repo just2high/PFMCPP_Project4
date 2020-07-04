@@ -13,13 +13,13 @@ Create a branch named Part9
  2) add these macros after the JUCE_LEAK_DETECTOR macro :
  */
 
-#define JUCE_DECLARE_NON_COPYABLE(className) \
-            className (const className&) = delete;\
-            className& operator= (const className&) = delete;
+// #define JUCE_DECLARE_NON_COPYABLE(className) \
+//             className (const className&) = delete;\
+//             className& operator= (const className&) = delete;
 
-#define JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(className) \
-            JUCE_DECLARE_NON_COPYABLE(className) \
-            JUCE_LEAK_DETECTOR(className)
+// #define JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(className) \
+//             JUCE_DECLARE_NON_COPYABLE(className) \
+//             JUCE_LEAK_DETECTOR(className)
 
 /*
  3) add JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary) to the end of the  Temporary<> struct
@@ -32,21 +32,38 @@ Create a branch named Part9
  
  You should end up with the same program output as Part 8's task if you did it right.
  */
-
+ 
+#include "LeakedObjectDetector.h"
 #include <iostream>
 #include <cmath>
 #include <functional>
 #include <memory>
 #include <limits>
 #include <typeinfo>
+
 template<typename NumericType>
 struct Temporary
 {
+    //constructor
     Temporary(NumericType t) : v(t)
     {
         std::cout << "I'm a Temporary<" << typeid(v).name() << "> object, #"
                   << counter++ << std::endl;
     }
+
+    //destructor
+    ~Temporary() = default;
+
+    //move constructor
+    Temporary(Temporary&& t) : v( std::move(t.v) ) {}
+
+    //move assignment
+    Temporary& operator=(Temporary&& t)
+    {
+        this->v = std::move(t.v);
+        return *this;
+    }
+
     /*
      revise these conversion functions to read/write to 'v' here
      hint: what qualifier do read-only functions usually have?
@@ -56,7 +73,10 @@ struct Temporary
 private:
     static int counter;
     NumericType v;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary)
 };
+
 
 template<typename NumericType>
 int Temporary<NumericType>::counter = 0;
@@ -102,8 +122,23 @@ struct Numeric
 {
     using Type = Temporary<T>;
 
-    Numeric( Type varA ) : a( std::make_unique<Type>(varA) ) {}
+    //constructor
+    Numeric( T varA ) : a( std::make_unique<Type>(varA) ) {}
 
+    //destructor
+    ~Numeric() = default;
+
+    //move constructor
+    Numeric( Numeric&& n ) : a( std::move(n.a) ) {}
+
+    //move assignment
+    Numeric& operator=( Numeric&& n )
+    {
+        this->a = std::move(n.a);
+        return *this;
+    }
+
+    //copy operators
     operator T() const { return *a; }
 
     operator T&() { return *a; }
@@ -181,6 +216,8 @@ struct Numeric
 
 private:
     std::unique_ptr<Type> a;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Numeric)
 };
 
 struct Point
